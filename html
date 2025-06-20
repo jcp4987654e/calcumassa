@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Eléctrica Profesional (v10 Estable)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 500; font-size: 0.875rem; }
+        .input-group input, .input-group select { width: 100%; padding: 0.75rem; border: 1px solid #d2d6dc; border-radius: 0.5rem; transition: border-color 0.2s; }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4); }
+        .input-group input:disabled { background-color: #f3f4f6; cursor: not-allowed; }
+        .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+        .result-card { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; margin-top: 1rem; }
+        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #e5e7eb; }
+        .result-item:last-child { border-bottom: none; }
+        .anexo-box { background-color: #f3f4f6; border-top: 2px solid #6366f1; padding: 1.5rem; margin-top: 2rem; border-radius: 0.5rem; }
+        .anexo-box h3 { font-size: 1.5rem; font-weight: 700; color: #4338ca; margin-bottom: 1rem; }
+        .formula-box { background: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; font-family: 'Courier New', monospace; border: 1px solid #e5e7eb; line-height: 1.6; font-size: 0.9rem; overflow-x: auto; }
+        table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.9rem; }
+        th, td { padding: 0.75rem; border: 1px solid #d1d5db; text-align: center;}
+        th { background-color: #e5e7eb; }
+        details > summary { cursor: pointer; font-weight: 500; color: #374151; }
+        .log-box { background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; color: #1f2937; max-height: 400px; overflow-y: auto;}
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Calculadora Eléctrica Profesional</h1>
+            <p class="text-md text-gray-600 mt-2">Análisis de Cortocircuito y Dimensionamiento de Circuitos (Metodología AEA)</p>
+        </header>
+
+        <!-- Parte 1: Calculadora de Cortocircuito -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800 border-b pb-3">Parte 1: Análisis de Corriente de Cortocircuito</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <form id="shortCircuitForm">
+                        <div class="mb-6 pb-6 border-b border-gray-200">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800">1. Red de Distribución</h3>
+                            <div class="input-group"><label for="sccRed">Potencia de Cortocircuito de Red (Scc)</label><div class="flex items-center"><input type="number" id="sccRed" value="250" class="rounded-r-none"><span class="inline-block bg-gray-200 p-[13px] border border-l-0 border-gray-300 rounded-r-lg text-sm">MVA</span></div></div>
+                            <div class="input-group"><label for="tensionRed">Tensión de la Red (L-L)</label><div class="flex items-center"><input type="number" id="tensionRed" value="13.2" class="rounded-r-none"><span class="inline-block bg-gray-200 p-[13px] border border-l-0 border-gray-300 rounded-r-lg text-sm">kV</span></div></div>
+                        </div>
+                        <div class="mb-6 pb-6 border-b border-gray-200">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800">2. Transformador MT/BT</h3>
+                            <div class="input-group"><label for="power">Potencia (S)</label><div class="flex items-center"><input type="number" id="power" value="630" class="rounded-r-none"><span class="inline-block bg-gray-200 p-[13px] border border-l-0 border-gray-300 rounded-r-lg text-sm">kVA</span></div></div>
+                            <div class="input-group"><label for="voltage">Tensión Secundaria (L-L)</label><div class="flex items-center"><input type="number" id="voltage" value="400" class="rounded-r-none"><span class="inline-block bg-gray-200 p-[13px] border border-l-0 border-gray-300 rounded-r-lg text-sm">V</span></div></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group"><label for="impedance">Ucc (%)</label><div class="flex items-center"><input type="number" id="impedance" value="4" class="rounded-r-none"><span class="inline-block bg-gray-200 p-[13px] border border-l-0 border-gray-300 rounded-r-lg text-sm">%</span></div></div>
+                                <div class="input-group"><label for="Ur_percent">Ur (%)</label><div class="flex items-center"><input type="number" id="Ur_percent" value="1.1" placeholder="Ver tabla" class="rounded-r-none"><span class="inline-block bg-gray-200 p-[13px] border border-l-0 border-gray-300 rounded-r-lg text-sm">%</span></div></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800">3. Tramos de Cable en Baja Tensión</h3>
+                            <div id="cableSectionsContainerSC"></div>
+                            <div class="mt-4 flex space-x-4">
+                                <button type="button" id="addCableSectionBtn" class="btn bg-blue-600 hover:bg-blue-700 text-white w-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>Agregar Tramo</button>
+                                <button type="button" id="resetButtonSC" class="btn bg-red-600 hover:bg-red-700 text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>Reiniciar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="resultsContainerSC" class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex justify-between items-center"><h3 class="text-xl font-semibold mb-4 text-gray-800">Resultados del Cortocircuito</h3> <button id="exportSCBtn" class="btn bg-green-600 hover:bg-green-700 text-white text-sm py-2 px-3">Exportar a Excel</button></div>
+                    <div id="resultsPlaceholderSC" class="text-center text-gray-500 py-10"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><p class="mt-4">Los resultados aparecerán aquí.</p></div>
+                    <div id="resultsContentSC"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 pt-8 border-t-2 border-gray-300">
+             <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Parte 2: Dimensionamiento de Circuitos</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <div id="circuitsContainer"></div>
+                <div class="mt-6"><button type="button" id="addCircuitBtn" class="btn btn-primary w-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>Agregar Circuito</button></div>
+            </div>
+             <div class="mt-8 flex justify-end"> <button id="exportDimBtn" class="btn bg-green-600 hover:bg-green-700 text-white text-sm py-2 px-3">Exportar Resultados a Excel</button></div>
+            <div id="sectionResultsContainer" class="mt-2"></div>
+        </div>
+        
+        <div id="anexo" class="anexo-box">
+            <h3>Anexo Técnico: Fórmulas y Tablas de Referencia</h3>
+            <h4 class="text-lg font-semibold mt-4 mb-2 text-indigo-700">Fórmulas de Cálculo</h4>
+            <div class="formula-box">
+                <strong>Corriente de Carga (Ib):</strong> Ib = S_va / (k * U_linea_V * cos φ)  (k=1 monof, k=√3 trif)<br>
+                <strong>Corriente Admisible (Iz):</strong> Iz = I_tabla * k1 (temp) * k2 (agrup)<br>
+                <strong>Caída de Tensión (ΔV):</strong> ΔV = K * L_km * Ib * (R_km*cosφ + X_km*sinφ) (K=2 monof, K=√3 trif)<br>
+                <strong>Icc Admisible Cable (Iadm_cc):</strong> Iadm_cc = k_cc * S_mm² / sqrt(t_seg)
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Factor k1 (Temperatura)</h4> <div class="overflow-x-auto"> <table id="k1Table"></table> </div> </div>
+                <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Factor k2 (Agrupamiento)</h4> <div class="overflow-x-auto"> <table id="k2Table"></table> </div> </div>
+                <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Constante k (Cortocircuito)</h4> <div class="overflow-x-auto"> <table id="kCCTable"></table> </div> </div>
+                <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Factor χ (Impulso)</h4> <div class="overflow-x-auto"> <table id="kappaTable"></table> </div> </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-12 pt-6 border-t border-gray-200 text-sm text-gray-500">
+            <p><strong>Nota:</strong> Esta calculadora ofrece una estimación con fines educativos. Para diseños formales, es imperativo consultar la reglamentación AEA 90364 vigente.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const CONSTS = {
+                VOLTAGE: { monofasico: 220, trifasico: 400 },
+                CABLE_SECTIONS: ["1.5", "2.5", "4", "6", "10", "16", "25", "35", "50", "70", "95", "120", "150", "185", "240"],
+                CIRCUIT_PRESETS: {'IUG':{p:2200,pf:0.95,dv:3}, 'TUG':{p:2200,pf:0.9,dv:5}, 'TUE':{p:3300,pf:0.9,dv:5}, 'CUSTOM':{p:0,pf:0.85,dv:3}},
+                CABLE_RESISTANCE: {cobre:{pvc:{'1.5':15.91,'2.5':9.55,'4':5.92,'6':3.95,'10':2.29,'16':1.48,'25':0.934,'35':0.663,'50':0.463,'70':0.326,'95':0.248,'120':0.195,'150':0.157,'185':0.13,'240':0.1},xlpe:{'1.5':16.96,'2.5':10.18,'4':6.31,'6':4.21,'10':2.44,'16':1.54,'25':0.995,'35':0.707,'50':0.493,'70':0.348,'95':0.264,'120':0.207,'150':0.167,'185':0.138,'240':0.106}},aluminio:{pvc:{'10':3.755,'16':2.427,'25':1.531,'35':1.087,'50':0.759,'70':0.534,'95':0.402,'120':0.32,'150':0.257,'185':0.213,'240':0.164},xlpe:{'10':4.002,'16':2.525,'25':1.631,'35':1.159,'50':0.808,'70':0.569,'95':0.433,'120':0.339,'150':0.274,'185':0.226,'240':0.174}}},
+                CABLE_REACTANCE: {unipolar:{'1.5':.08,'2.5':.08,'4':.08,'6':.078,'10':.136,'16':.126,'25':.117,'35':.111,'50':.106,'70':.1,'95':.095,'120':.091,'150':.086,'185':.083,'240':.081},tripolar:{'1.5':.08,'2.5':.08,'4':.08,'6':.078,'10':.115,'16':.107,'25':.1,'35':.095,'50':.091,'70':.086,'95':.083,'120':.081,'150':.079,'185':.079,'240':.076}},
+                AMPACITY: {pvc_cobre:{caneria_unipolar:{'1.5':15,'2.5':21,'4':28,'6':36,'10':50,'16':68,'25':89,'35':110,'50':134,'70':171,'95':207}},xlpe_cobre:{caneria_unipolar:{'1.5':18,'2.5':24,'4':32,'6':40,'10':55,'16':73,'25':96,'35':116,'50':140,'70':177,'95':212}},pvc_aluminio:{caneria_unipolar:{'16':54,'25':70,'35':86,'50':103,'70':130,'95':156}},xlpe_aluminio:{caneria_unipolar:{'16':58,'25':76,'35':94,'50':113,'70':142,'95':171}}},
+                KAPPA_TABLE: [{r:0,k:2},{r:.1,k:1.86},{r:.2,k:1.71},{r:.3,k:1.57},{r:.4,k:1.45},{r:.5,k:1.35},{r:.6,k:1.26},{r:.7,k:1.19},{r:.8,k:1.13},{r:.9,k:1.08},{r:1,k:1.04},{r:1.1,k:1.02},{r:1.2,k:1.01}],
+                K1_TEMP_FACTOR: {pvc:[{t:10,f:1.29},{t:15,f:1.22},{t:20,f:1.15},{t:25,f:1.08},{t:30,f:1},{t:35,f:.91},{t:40,f:.82}],xlpe:[{t:10,f:1.19},{t:15,f:1.14},{t:20,f:1.1},{t:25,f:1.05},{t:30,f:1},{t:35,f:.95},{t:40,f:.89}]},
+                K2_GROUP_FACTOR: [{n:1,f:1},{n:2,f:.8},{n:3,f:.7},{n:4,f:.65},{n:5,f:.6},{n:6,f:.57}],
+                K_FACTOR_CC: {pvc:{cobre:115,aluminio:76},xlpe:{cobre:143,aluminio:94}}
+            };
+
+            let lastSCImpedances = { R: 0, X: 0 };
+            
+            const getById = id => document.getElementById(id);
+            const runAllCalculations = () => { calculateAndDisplaySC(); calculateAllSections(); };
+            
+            function getKappaFactor(ratio) {
+                if (isNaN(ratio)) return 1.0;
+                if (ratio >= CONSTS.KAPPA_TABLE[CONSTS.KAPPA_TABLE.length - 1].r) return 1.0;
+                for (let i = 0; i < CONSTS.KAPPA_TABLE.length - 1; i++) {
+                    if (ratio >= CONSTS.KAPPA_TABLE[i].r && ratio < CONSTS.KAPPA_TABLE[i+1].r) {
+                        const lower = CONSTS.KAPPA_TABLE[i]; const upper = CONSTS.KAPPA_TABLE[i+1];
+                        return lower.k + ((ratio - lower.r) / (upper.r - lower.r)) * (upper.k - lower.k);
+                    }
+                }
+                return 1.0;
+            }
+
+            function getK1Factor(insulation, temp) {
+                const table = CONSTS.K1_TEMP_FACTOR[insulation];
+                if (!table) return 1.0;
+                let factor = 1.0;
+                for (const row of table) { if (temp <= row.t) { factor = row.f; break; } }
+                return factor || table[table.length-1].f;
+            }
+
+            function getK2Factor(count) {
+                return CONSTS.K2_GROUP_FACTOR.find(r => r.n >= count)?.f || CONSTS.K2_GROUP_FACTOR[CONSTS.K2_GROUP_FACTOR.length-1].f;
+            }
+            
+            function populateReferenceTables() {
+                const createTable = (data, headers) => `<thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${data.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody>`;
+                getById('k1Table').innerHTML = createTable(CONSTS.K1_TEMP_FACTOR.pvc.map((p, i) => [p.t, p.f.toFixed(2), CONSTS.K1_TEMP_FACTOR.xlpe[i].f.toFixed(2)]), ['Temp (°C)', 'k1 (PVC)', 'k1 (XLPE)']);
+                getById('k2Table').innerHTML = createTable(CONSTS.K2_GROUP_FACTOR.map(r => [r.n, r.f.toFixed(2)]), ['N° Circuitos', 'k2']);
+                getById('kCCTable').innerHTML = createTable([ ['PVC', 115, 76], ['XLPE', 143, 94] ], ['Aislación', 'k (Cobre)', 'k (Aluminio)']);
+                getById('kappaTable').innerHTML = createTable(CONSTS.KAPPA_TABLE.map(r => [r.r.toFixed(1), r.k.toFixed(2)]), ['R/X', 'Factor χ']);
+            }
+            
+            function addCableSection() {
+                const container = getById('cableSectionsContainerSC');
+                const id = `sc-cable-${Date.now()}`;
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'border border-gray-200 p-4 rounded-lg mb-4';
+                sectionDiv.id = id;
+                let sectionOptions = CONSTS.CABLE_SECTIONS.filter(s => parseFloat(s) >= 10).map(s => `<option value="${s}" ${s === "95" ? "selected" : ""}>${s} mm²</option>`).join('');
+                sectionDiv.innerHTML = `<div class="flex justify-between items-center mb-2"><h4 class="font-semibold text-gray-700">Tramo de BT #${container.children.length + 1}</h4><button type="button" class="text-red-500 hover:text-red-700 remove-btn font-bold text-xl" data-target="${id}">&times;</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4"><div class="input-group"><label>Material</label><select class="cable-material-sc"><option value="cobre" selected>Cobre</option><option value="aluminio">Aluminio</option></select></div><div class="input-group"><label>Aislación</label><select class="cable-insulation-sc"><option value="pvc" selected>PVC (70°C)</option><option value="xlpe">XLPE (90°C)</option></select></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-x-4"><div class="input-group"><label>Longitud (m)</label><input type="number" value="20" class="cable-length-sc" min="0"></div><div class="input-group"><label>Sección</label><select class="cable-section-area-sc">${sectionOptions}</select></div><div class="input-group"><label>Tipo</label><select class="cable-type-sc"><option value="tripolar" selected>Tripolar</option><option value="unipolar">3 Unipolares</option></select></div></div>`;
+                container.appendChild(sectionDiv);
+            }
+
+            function calculateAndDisplaySC() {
+                const resultsContent = getById('resultsContentSC');
+                const resultsPlaceholder = getById('resultsPlaceholderSC');
+                resultsContent.innerHTML = '';
+                
+                const Scc_red_mva = parseFloat(getById('sccRed').value) || 0;
+                const U_red_kv = parseFloat(getById('tensionRed').value) || 0;
+                const S_tr_kva = parseFloat(getById('power').value) || 0;
+                const U_tr_v = parseFloat(getById('voltage').value) || 0;
+                const Zcc_tr_percent = parseFloat(getById('impedance').value) || 0;
+                const Ur_tr_percent = parseFloat(getById('Ur_percent').value) || 0;
+
+                if (!Scc_red_mva || !U_red_kv || !S_tr_kva || !U_tr_v || !Zcc_tr_percent) {
+                    resultsPlaceholder.style.display = 'block'; resultsContent.style.display = 'none'; return;
+                }
+                resultsPlaceholder.style.display = 'none'; resultsContent.style.display = 'block';
+
+                const Z_red_ohm = (1.1 * U_red_kv**2) / Scc_red_mva;
+                const R_red_ohm = Z_red_ohm * 0.1;
+                const X_red_ohm = Math.sqrt(Z_red_ohm**2 - R_red_ohm**2);
+                addSCResult("Bornes de MT del Trafo", U_red_kv * 1000, R_red_ohm, X_red_ohm);
+
+                const transform_ratio = (U_red_kv * 1000) / U_tr_v;
+                const R_red_ref_ohm = R_red_ohm / (transform_ratio**2);
+                const X_red_ref_ohm = X_red_ohm / (transform_ratio**2);
+
+                let R_tr_ohm, X_tr_ohm;
+                if (Ur_tr_percent > 0) {
+                    R_tr_ohm = (Ur_tr_percent / 100) * (U_tr_v**2 / (S_tr_kva * 1000));
+                    const Ux_tr_percent = Math.sqrt(Math.max(0, Zcc_tr_percent**2 - Ur_tr_percent**2));
+                    X_tr_ohm = (Ux_tr_percent / 100) * (U_tr_v**2 / (S_tr_kva * 1000));
+                } else { const Z_tr_ohm_calc=(Zcc_tr_percent/100)*(U_tr_v**2/(S_tr_kva*1000));R_tr_ohm=Z_tr_ohm_calc*.2;X_tr_ohm=Math.sqrt(Math.max(0,Z_tr_ohm_calc**2-R_tr_ohm**2)) }
+
+                let R_total_bt = R_red_ref_ohm + R_tr_ohm;
+                let X_total_bt = X_red_ref_ohm + X_tr_ohm;
+                addSCResult("Bornes de BT del Trafo", U_tr_v, R_total_bt, X_total_bt);
+                
+                getById('cableSectionsContainerSC').querySelectorAll('.border').forEach((section, index) => {
+                    const length_m = parseFloat(section.querySelector('.cable-length-sc').value) || 0;
+                    const area = section.querySelector('.cable-section-area-sc').value;
+                    const type = section.querySelector('.cable-type-sc').value;
+                    const material = section.querySelector('.cable-material-sc').value;
+                    const insulation = section.querySelector('.cable-insulation-sc').value;
+
+                    if (length_m > 0 && area && CONSTS.CABLE_RESISTANCE[material]?.[insulation]?.[area]) {
+                        const r_km = CONSTS.CABLE_RESISTANCE[material][insulation][area];
+                        const x_km = CONSTS.CABLE_REACTANCE[type][area] || 0;
+                        R_total_bt += r_km * (length_m / 1000);
+                        X_total_bt += x_km * (length_m / 1000);
+                        addSCResult(`Final Tramo de Cable #${index + 1}`, U_tr_v, R_total_bt, X_total_bt);
+                    }
+                });
+                
+                lastSCImpedances = { R: R_total_bt, X: X_total_bt };
+            }
+            
+            function addSCResult(pointName, voltage_v, R_total, X_total) {
+                const Z_total = Math.sqrt(R_total**2 + X_total**2);
+                const Icc3 = voltage_v / (Math.sqrt(3) * Z_total);
+                const kappa = getKappaFactor(R_total / X_total);
+                const Is = kappa * Math.sqrt(2) * Icc3;
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result-card';
+                resultDiv.dataset.point = pointName;
+                resultDiv.innerHTML = `<h4 class="text-lg font-semibold text-blue-600 mb-3">${pointName}</h4><div class="result-item"><span>Icc Trifásica (Icc):</span><span class="font-bold text-xl text-red-600">${(Icc3 / 1000).toFixed(2)} kA</span></div><div class="result-item"><span>Corriente de Impulso (Is):</span><span class="font-bold text-xl text-purple-600">${(Is / 1000).toFixed(2)} kA</span></div><div class="result-item text-sm text-gray-600"><span>Impedancia Total (Z):</span><span>${Z_total.toFixed(5)} Ω</span></div><div class="result-item text-sm text-gray-600"><span>Resistencia Total (R):</span><span>${R_total.toFixed(5)} Ω</span></div><div class="result-item text-sm text-gray-600"><span>Reactancia Total (X):</span><span>${X_total.toFixed(5)} Ω</span></div><div class="result-item text-sm text-gray-600"><span>Relación R/X:</span><span>${(R_total/X_total).toFixed(3)}</span></div><div class="result-item text-sm text-gray-600"><span>Factor (χ):</span><span>${kappa.toFixed(3)}</span></div>`;
+                getById('resultsContentSC').appendChild(resultDiv);
+            }
+
+            function resetAllSC() { getById('cableSectionsContainerSC').innerHTML = ''; runAllCalculations(); }
+
+            function addCircuit() {
+                const container = getById('circuitsContainer');
+                const id = `dim-circuit-${Date.now()}`;
+                const circuitDiv = document.createElement('div');
+                circuitDiv.className = 'circuit-block border border-gray-300 p-4 rounded-lg mb-4';
+                circuitDiv.id = id;
+                circuitDiv.innerHTML = `<div class="flex justify-between items-center mb-2"><h4 class="font-semibold text-gray-700">Circuito de Carga #${container.children.length + 1}</h4><button type="button" class="text-red-500 hover:text-red-700 remove-btn font-bold text-xl" data-target="${id}">&times;</button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="input-group"><label>Tipo Circuito</label><select class="circuit-type"><option value="IUG">IUG</option><option value="TUG">TUG</option><option value="TUE">TUE</option><option value="CUSTOM" selected>Específico</option></select></div><div class="input-group"><label>Dato Entrada</label><select class="input-type"><option value="power" selected>Potencia (VA)</option><option value="current">Corriente (A)</option></select></div><div class="input-group power-input-group"><label>Potencia (S)</label><input type="number" class="circuit-power"></div><div class="input-group current-input-group hidden"><label>Corriente (Ib)</label><input type="number" class="circuit-current"></div><div class="input-group"><label>cos φ</label><input type="number" class="circuit-pf" value="0.85" step="0.01"></div><div class="input-group"><label>Sistema</label><select class="circuit-system"><option value="monofasico" selected>Monofásico</option><option value="trifasico">Trifásico</option></select></div><div class="input-group"><label>Material</label><select class="circuit-material"><option value="cobre" selected>Cobre</option><option value="aluminio">Aluminio</option></select></div><div class="input-group"><label>Aislación</label><select class="circuit-insulation"><option value="pvc" selected>PVC</option><option value="xlpe">XLPE</option></select></div><div class="input-group"><label>Longitud (m)</label><input type="number" value="20" class="circuit-length"></div><div class="input-group"><label>ΔV% Máx.</label><input type="number" value="3" class="circuit-max-dv"></div><div class="input-group"><label>Temp. Ambiente (°C)</label><input type="number" value="30" class="circuit-temp"></div><div class="input-group"><label>Circuitos Agrupados</label><input type="number" value="1" class="circuit-group"></div><div class="input-group"><label>Tiempo Despeje (s)</label><input type="number" value="0.1" step="0.01" class="circuit-tcc"></div></div>`;
+                container.appendChild(circuitDiv);
+                updateCircuitPreset(circuitDiv.querySelector('.circuit-type'));
+            }
+
+            function updateCircuitPreset(select) {
+                const preset = CONSTS.CIRCUIT_PRESETS[select.value];
+                const block = select.closest('.circuit-block');
+                block.querySelector('.circuit-power').value = preset.p;
+                block.querySelector('.circuit-pf').value = preset.pf;
+                block.querySelector('.circuit-max-dv').value = preset.dv;
+                block.querySelector('.input-type').disabled = select.value !== 'CUSTOM';
+            }
+
+            function toggleInputType(select) {
+                const block = select.closest('.circuit-block');
+                const powerGroup = block.querySelector('.power-input-group');
+                const currentGroup = block.querySelector('.current-input-group');
+                if (select.value === 'power') {
+                    powerGroup.style.display = 'block'; currentGroup.style.display = 'none';
+                } else {
+                    powerGroup.style.display = 'none'; currentGroup.style.display = 'block';
+                }
+            }
+
+            function calculateAllSections() {
+                getById('sectionResultsContainer').innerHTML = '';
+                getById('circuitsContainer').querySelectorAll('.circuit-block').forEach((block, index) => {
+                    const data = {
+                        title: `Circuito de Carga #${index + 1}`,
+                        inputType: block.querySelector('.input-type').value,
+                        S_va: parseFloat(block.querySelector('.circuit-power').value) || 0,
+                        Ib_in: parseFloat(block.querySelector('.circuit-current').value) || 0,
+                        cosPhi: parseFloat(block.querySelector('.circuit-pf').value) || 0.01,
+                        system: block.querySelector('.circuit-system').value,
+                        L_m: parseFloat(block.querySelector('.circuit-length').value) || 0,
+                        maxDV_percent: parseFloat(block.querySelector('.circuit-max-dv').value) || 0,
+                        material: block.querySelector('.circuit-material').value,
+                        insulation: block.querySelector('.circuit-insulation').value,
+                        temp: parseInt(block.querySelector('.circuit-temp').value) || 30,
+                        groupCount: parseInt(block.querySelector('.circuit-group').value) || 1,
+                        t_cc: parseFloat(block.querySelector('.circuit-tcc').value) || 0.1,
+                        log: [],
+                    };
+                    data.V = CONSTS.VOLTAGE[data.system];
+
+                    if (data.inputType === 'power') {
+                        if (data.S_va === 0) return;
+                        data.Ib = data.system === 'trifasico' ? (data.S_va/(Math.sqrt(3)*data.V)) : (data.S_va/data.V);
+                        data.log.push(`1. Ib (por Potencia) = <strong>${data.Ib.toFixed(2)} A</strong>`);
+                    } else { if (data.Ib_in === 0) return; data.Ib = data.Ib_in; data.log.push(`1. Ib (por Dato) = <strong>${data.Ib.toFixed(2)} A</strong>`); }
+
+                    data.k1 = getK1Factor(data.insulation, data.temp);
+                    data.k2 = getK2Factor(data.groupCount);
+                    data.log.push(`2. Corriente Admisible (Iz) con k1=${data.k1.toFixed(2)}, k2=${data.k2.toFixed(2)}`);
+                    
+                    const ampTableKey = `${data.insulation}_${data.material}`;
+                    const ampacityTable = CONSTS.AMPACITY[ampTableKey]?.caneria_unipolar;
+                    if (!ampacityTable) { /* error handling */ return; }
+
+                    let sectionByIz = null;
+                    for (const section of CONSTS.CABLE_SECTIONS) {
+                        const iTabla = ampacityTable[section] || 0;
+                        const iz = iTabla * data.k1 * data.k2;
+                        if (iz >= data.Ib) { sectionByIz = section; data.log.push(`&nbsp;&nbsp;Sección ${section}mm²: Iz=${iz.toFixed(2)}A. OK.`); break; }
+                    }
+
+                    if (!sectionByIz) { /* error handling */ return; }
+                    data.log.push(`&nbsp;&nbsp;Sección inicial por Iz: <strong>${sectionByIz}mm²</strong>`);
+
+                    data.log.push(`3. Verificación Caída de Tensión (ΔV%)`);
+                    let finalSection = sectionByIz;
+                    while(true) {
+                        const r_km = CONSTS.CABLE_RESISTANCE[data.material][data.insulation][finalSection] || 0;
+                        const x_km = CONSTS.CABLE_REACTANCE.tripolar[finalSection] || 0; 
+                        const dv_factor = data.system === 'trifasico' ? Math.sqrt(3) : 2;
+                        data.dv_percent = (dv_factor * (data.L_m/1000) * data.Ib * (r_km*data.cosPhi + x_km*Math.sqrt(1-data.cosPhi**2)) / data.V) * 100;
+                        data.log.push(`&nbsp;&nbsp;Verificando ${finalSection}mm² -> ΔV% = ${data.dv_percent.toFixed(2)}%`);
+                        if (data.dv_percent > data.maxDV_percent) {
+                            const currentIndex = CONSTS.CABLE_SECTIONS.indexOf(finalSection);
+                            if (currentIndex + 1 < CONSTS.CABLE_SECTIONS.length) { finalSection = CONSTS.CABLE_SECTIONS[currentIndex + 1]; } else { finalSection = "Error"; break; }
+                        } else { break; }
+                    }
+                    data.finalSection = finalSection;
+                    data.log.push(`&nbsp;&nbsp;Sección por ΔV: <strong>${finalSection}mm²</strong>`);
+
+                    data.log.push(`4. Verificación Cortocircuito`);
+                    if (data.finalSection !== "Error") {
+                        const L_km = data.L_m / 1000;
+                        const R_cable_falla = (CONSTS.CABLE_RESISTANCE[data.material][data.insulation][data.finalSection] || 0) * L_km;
+                        const X_cable_falla = (CONSTS.CABLE_REACTANCE.tripolar[data.finalSection] || 0) * L_km;
+                        const Z_falla_total = Math.sqrt((lastSCImpedances.R + R_cable_falla)**2 + (lastSCImpedances.X + X_cable_falla)**2);
+                        data.Icc_falla = (getById('voltage').value || 400) / (Math.sqrt(3) * Z_falla_total);
+                        
+                        const k_cc = CONSTS.K_FACTOR_CC[data.insulation][data.material];
+                        data.Iadm_cc = (k_cc * parseFloat(data.finalSection)) / Math.sqrt(data.t_cc);
+
+                        data.log.push(`&nbsp;&nbsp;Icc Falla = <strong>${(data.Icc_falla / 1000).toFixed(2)} kA</strong>`);
+                        data.log.push(`&nbsp;&nbsp;Iadm_cc = <strong>${(data.Iadm_cc/1000).toFixed(2)} kA</strong>`);
+                        data.cc_check_ok = data.Iadm_cc > data.Icc_falla;
+                    }
+                    displaySectionResult(data);
+                });
+            }
+
+            function displaySectionResult(data) {
+                 let summary, finalClass;
+                 if(data.finalSection === 'Error' || !data.cc_check_ok) {
+                     summary = 'El cable NO VERIFICA las condiciones.';
+                     finalClass = 'bg-red-100 text-red-800';
+                 } else {
+                     summary = `El cable VERIFICA. Sección final adoptada: <strong>${data.finalSection} mm²</strong>`;
+                     finalClass = 'bg-green-100 text-green-800';
+                 }
+
+                const resultHTML = `<div class="result-card" id="result-${data.id}" data-csv='${JSON.stringify(data)}'><h3 class="text-xl font-semibold text-blue-700 mb-2">${data.title}</h3><div class="result-item"><span>Corriente de Proyecto (Ib):</span><span class="font-bold text-lg">${data.Ib.toFixed(2)} A</span></div><div class="result-item"><span>Caída de Tensión (ΔV%):</span><span class="font-bold text-lg ${data.dv_percent > data.maxDV_percent ? 'text-red-500' : 'text-green-600'}">${data.dv_percent.toFixed(2)} %</span></div><div class="result-item"><span>Icc Falla / Admisible:</span><span class="font-bold text-lg ${!data.cc_check_ok ? 'text-red-500' : 'text-green-600'}">${(data.Icc_falla/1000).toFixed(2)} / ${(data.Iadm_cc/1000).toFixed(2)} kA</span></div><div class="p-4 mt-4 rounded-lg ${finalClass}"><h4 class="font-bold text-xl text-center">${summary}</h4></div><details class="mt-4"><summary>Ver Proceso de Cálculo Detallado »</summary><div class="log-box">${data.log.map(l => `<div class="log-step">${l}</div>`).join('')}</div></details></div>`;
+                getById('sectionResultsContainer').insertAdjacentHTML('beforeend', resultHTML);
+            }
+            
+            function exportToCsv(filename, rows) {
+                const processRow = row => row.map(val => `"${(val==null ? '' : val.toString()).replace(/"/g, '""')}"`).join(';');
+                let csvContent = "data:text/csv;charset=utf-8," + rows.map(processRow).join('\n');
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", filename);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            function handleExportSC() {
+                const headers = ["Punto de Falla", "Icc (kA)", "Is (kA)", "Z_total (Ω)", "R_total (Ω)", "X_total (Ω)", "R/X", "Factor χ"];
+                const rows = [headers];
+                getById('resultsContentSC').querySelectorAll('.result-card').forEach(card => {
+                    const row = [ card.dataset.point ];
+                    card.querySelectorAll('.result-item span:last-child').forEach(span => row.push(span.textContent.split(' ')[0]));
+                    rows.push(row);
+                });
+                exportToCsv('resultados_cortocircuito.csv', rows);
+            }
+
+            function handleExportDim() {
+                const headers = ["Circuito", "Ib (A)", "Sección Final (mm²)", "dV (%)", "Icc Falla (kA)", "Iadm cc (kA)", "Verifica CC", "Verifica Total"];
+                const rows = [headers];
+                getById('sectionResultsContainer').querySelectorAll('.result-card').forEach(card => {
+                    const data = JSON.parse(card.dataset.csv);
+                    const row = [
+                        data.title,
+                        data.Ib.toFixed(2),
+                        data.finalSection,
+                        data.dv_percent.toFixed(2),
+                        (data.Icc_falla/1000).toFixed(2),
+                        (data.Iadm_cc/1000).toFixed(2),
+                        data.cc_check_ok ? "SI" : "NO",
+                        (data.finalSection !== 'Error' && data.cc_check_ok) ? "SI" : "NO"
+                    ];
+                    rows.push(row);
+                });
+                exportToCsv('resultados_dimensionamiento.csv', rows);
+            }
+            
+            document.body.addEventListener('click', event => {
+                if (event.target.classList.contains('remove-btn')) {
+                    const targetId = event.target.dataset.target;
+                    getById(targetId)?.remove();
+                    runAllCalculations();
+                }
+            });
+            document.body.addEventListener('change', event => {
+                if (event.target.classList.contains('circuit-type')) updateCircuitPreset(event.target);
+                if (event.target.classList.contains('input-type')) toggleInputType(event.target);
+            });
+             document.body.addEventListener('input', event => {
+                if (event.target.closest('.circuit-block')) calculateAllSections();
+            });
+
+            function init() {
+                populateReferenceTables();
+                getById('shortCircuitForm').addEventListener('input', runAllCalculations);
+                getById('addCableSectionBtn').addEventListener('click', addCableSection);
+                getById('resetButtonSC').addEventListener('click', resetAllSC);
+                getById('addCircuitBtn').addEventListener('click', addCircuit);
+                getById('exportSCBtn').addEventListener('click', handleExportSC);
+                getById('exportDimBtn').addEventListener('click', handleExportDim);
+                addCircuit();
+                runAllCalculations();
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
