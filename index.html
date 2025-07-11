@@ -1,1891 +1,271 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Calculadoras Técnicas Eléctricas Unificadas</title>
-
-    
-
-    <!-- Scripts y Fuentes Externas -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    
-
-    <!-- Script de MathJax para Fórmulas (de la calculadora de Puesta a Tierra) -->
-
-    <script>
-
-        window.MathJax = {
-
-            tex: {
-
-                inlineMath: [['$', '$']],
-
-                displayMath: [['$$', '$$']]
-
-            },
-
-            svg: {
-
-                fontCache: 'global'
-
-            }
-
-        };
-
-    </script>
-
-    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-
-
-    <!-- Estilos CSS Unificados -->
-
-    <style>
-
-        /* --- ESTILOS BASE Y DE NAVEGACIÓN --- */
-
-        :root { --brand-color: #4f46e5; --brand-color-light: #eef2ff; --line-color: #374151; }
-
-        body { font-family: 'Inter', sans-serif; background-color: #f4f4f9; color: #333; }
-
-        header { background-color: #2c3e50; color: #ecf0f1; text-align: center; padding: 2rem 1rem; }
-
-        header h1 { margin: 0; }
-
-        nav { display: flex; flex-wrap: wrap; justify-content: center; background-color: #34495e; padding: 0.5rem; position: sticky; top: 0; z-index: 1000; }
-
-        nav a { color: #ecf0f1; text-decoration: none; padding: 0.8rem 1.2rem; transition: background-color 0.3s ease; border-radius: 6px; margin: 2px; }
-
-        nav a:hover { background-color: #4e6a85; }
-
-        nav a.active { background-color: #e74c3c; font-weight: bold; }
-
-        main { max-width: 1200px; margin: 2rem auto; padding: 1rem; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-
-        section { padding: 1.5rem; border-bottom: 1px solid #eee; }
-
-        section:last-child { border-bottom: none; }
-
-        .hidden { display: none; }
-
-        footer { text-align: center; padding: 1.5rem; margin-top: 2rem; background-color: #2c3e50; color: #bdc3c7; }
-
-        .avalado-por { margin-top: 2rem; padding: 1rem; background-color: #ecf0f1; border-left: 5px solid #3498db; }
-
-
-
-        /* --- ESTILOS DE LA CALCULADORA DE CORTOCIRCUITO --- */
-
-        .input-group { margin-bottom: 1rem; }
-
-        .input-group label { display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 500; font-size: 0.875rem; }
-
-        .input-group input, .input-group select { width: 100%; padding: 0.75rem; border: 1px solid #d2d6dc; border-radius: 0.5rem; transition: border-color 0.2s, box-shadow 0.2s; }
-
-        .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--brand-color); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4); }
-
-        .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; border: none; }
-
-        .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
-
-        .result-card { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; margin-top: 1rem; }
-
-        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #e5e7eb; }
-
-        .result-item:last-child { border-bottom: none; }
-
-        .log-box { background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; color: #1f2937; max-height: 200px; overflow-y: auto;}
-
-        details > summary { cursor: pointer; font-weight: 500; color: #374151; }
-
-        .section-divider { border-bottom: 1px solid #e5e7eb; margin-bottom: 1.5rem; padding-bottom: 1.5rem; }
-
-        .anexo-box { background-color: var(--brand-color-light); border-top: 3px solid var(--brand-color); padding: 2rem; margin-top: 3rem; border-radius: 0.75rem; }
-
-        .anexo-box h3 { font-size: 1.75rem; font-weight: 700; color: #4338ca; margin-bottom: 1.5rem; }
-
-        .anexo-box h4 { font-size: 1.25rem; font-weight: 600; color: #4338ca; margin-bottom: 0.75rem; margin-top: 1.5rem; }
-
-        .anexo-box p { color: #374151; line-height: 1.6; }
-
-        #seccion-cortocircuito table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.9rem; background-color: white; }
-
-        #seccion-cortocircuito th, #seccion-cortocircuito td { padding: 0.75rem; border: 1px solid #d1d5db; text-align: center;}
-
-        #seccion-cortocircuito th { background-color: #e5e7eb; font-weight: 600; }
-
-        .calculation-log-entry { padding: 0.75rem; border-bottom: 1px solid #e5e7eb; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.5; }
-
-        .calculation-log-entry:last-child { border-bottom: none; }
-
-        .calculation-log-entry strong { color: var(--brand-color); }
-
-        .feeder-node { border: 2px solid var(--brand-color); border-radius: 0.75rem; padding: 1.5rem; margin-top: 1.5rem; background-color: #fafbff; }
-
-        .cable-node { border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 1rem; margin-top: 1rem; background-color: white; }
-
-        .node-actions { margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: flex-end; }
-
-        .node-name-input { background-color: transparent; border: none; font-weight: bold; width: 100%; padding: 2px; border-radius: 3px; }
-
-        .node-name-input:hover { background-color: #f0f4ff; }
-
-        .node-name-input:focus { outline: none; box-shadow: 0 0 0 2px var(--brand-color); }
-
-        .input-error { border-color: #ef4444 !important; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4) !important; }
-
-        .diagram-container { display: flex; flex-direction: column; align-items: center; font-family: 'Courier New', monospace; font-size: 13px; padding: 1rem; background-color: #fff; }
-
-        .diagram-line { width: 2px; background-color: var(--line-color); flex-shrink: 0; }
-
-        .diagram-bus { width: 100%; height: 5px; background-color: var(--line-color); margin: 0; position: relative; }
-
-        .diagram-children-wrapper { display: flex; flex-direction: row; justify-content: space-around; align-items: flex-start; width: 100%; gap: 24px; }
-
-        .diagram-branch { display: flex; flex-direction: column; align-items: center; flex-grow: 1; min-width: 140px; position: relative; }
-
-        .diagram-label { color: #555; font-size: 11px; white-space: nowrap; }
-
-        .diagram-icon-wrapper { position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: 40px; }
-
-        .diagram-icon { height: 32px; width: auto; background-color: #fff; padding: 0 2px; z-index: 1; }
-
-        .diagram-fault-icon { height: 20px; width: auto; flex-shrink: 0; margin-left: 8px; z-index: 2; }
-
-        .diagram-line-through { position: absolute; width: 2px; height: 100%; background-color: var(--line-color); z-index: 0; }
-
-        #diagramModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; }
-
-        #diagramModalContent { background-color: #fff; padding: 20px; border-radius: 10px; max-width: 95vw; max-height: 95vh; overflow: auto; }
-
-        #closeDiagramModal { position: absolute; top: 15px; right: 25px; font-size: 35px; color: white; cursor: pointer; }
-
-
-
-        /* --- ESTILOS DE LA CALCULADORA DE CABLES --- */
-
-        .result-line { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
-
-        .result-line:last-child { border-bottom: none; }
-
-        .loader { border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #3498db; width: 24px; height: 24px; animation: spin 1s linear infinite; }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .tab-button.active { border-bottom-color: #3b82f6; color: #3b82f6; font-weight: 600; }
-
-        .ok-icon { color: #22c55e; }
-
-        .fail-icon { color: #ef4444; }
-
-        .log-entry { padding: 4px 8px; margin-bottom: 4px; border-left-width: 4px; border-radius: 4px; }
-
-        .log-step { border-color: #60a5fa; background-color: #eff6ff; }
-
-        .log-pass { border-color: #34d399; background-color: #f0fdf4; }
-
-        .log-fail { border-color: #f87171; background-color: #fef2f2; }
-
-        .log-final { border-color: #a78bfa; background-color: #f5f3ff; font-weight: bold; }
-
-        .log-manual { border-color: #facc15; background-color: #fffbeb; }
-
-        .log-header { border-top: 2px solid #9ca3af; border-bottom: 2px solid #9ca3af; margin-top: 1rem; margin-bottom: 0.5rem; padding: 0.5rem; background-color: #e5e7eb; font-weight: bold; text-align: center; }
-
-
-
-        /* --- ESTILOS DE LA CALCULADORA DE PUESTA A TIERRA --- */
-
-        #seccion-tierra { background-color: #111827; color: #d1d5db; }
-
-        #seccion-tierra .tab-button.active { border-color: #3b82f6; color: #3b82f6; background-color: #1f2937; }
-
-        #seccion-tierra .tab-button { border-color: #4b5563; }
-
-        #seccion-tierra .result-section, #seccion-tierra .mode-section, #seccion-tierra .electrode-params { display: none; }
-
-        #seccion-tierra .loader { border: 4px solid #4b5563; border-top: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
-
-        #seccion-tierra #export-content { position: absolute; left: -9999px; top: -9999px; }
-
-        #seccion-tierra .sector-card, #seccion-tierra .info-card { animation: fadeIn 0.5s ease-in-out; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        #seccion-tierra .tooltip-container { position: relative; display: inline-block; cursor: help; }
-
-        #seccion-tierra .tooltip-icon { font-size: 10px; padding: 2px 6px; border-radius: 50%; background-color: #4b5563; color: white; margin-left: 5px; user-select: none; }
-
-        #seccion-tierra .tooltip-text { visibility: hidden; width: 250px; background-color: #1f2937; color: #fff; text-align: left; border-radius: 6px; padding: 10px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; border: 1px solid #4b5563; font-size: 0.8rem; pointer-events: none; }
-
-        #seccion-tierra .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
-
-        #seccion-tierra ::-webkit-scrollbar { width: 8px; }
-
-        #seccion-tierra ::-webkit-scrollbar-track { background: #1f2937; }
-
-        #seccion-tierra ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-
-        #seccion-tierra ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
-
-    </style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras Técnicas Eléctricas Unificadas</title>
+    
+    <!-- Scripts y Fuentes Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Script de MathJax para Fórmulas (de la calculadora de Puesta a Tierra) -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Estilos CSS Unificados -->
+    <style>
+        /* --- ESTILOS BASE Y DE NAVEGACIÓN --- */
+        :root { --brand-color: #4f46e5; --brand-color-light: #eef2ff; --line-color: #374151; }
+        body { font-family: 'Inter', sans-serif; background-color: #f4f4f9; color: #333; }
+        header { background-color: #2c3e50; color: #ecf0f1; text-align: center; padding: 2rem 1rem; }
+        header h1 { margin: 0; }
+        nav { display: flex; flex-wrap: wrap; justify-content: center; background-color: #34495e; padding: 0.5rem; position: sticky; top: 0; z-index: 1000; }
+        nav a { color: #ecf0f1; text-decoration: none; padding: 0.8rem 1.2rem; transition: background-color 0.3s ease; border-radius: 6px; margin: 2px; }
+        nav a:hover { background-color: #4e6a85; }
+        nav a.active { background-color: #e74c3c; font-weight: bold; }
+        main { max-width: 1200px; margin: 2rem auto; padding: 1rem; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        main > section { padding: 1.5rem; border-bottom: 1px solid #eee; } /* Selector '>' para no afectar secciones anidadas */
+        main > section:last-of-type { border-bottom: none; }
+        .hidden { display: none; }
+        footer { text-align: center; padding: 1.5rem; margin-top: 2rem; background-color: #2c3e50; color: #bdc3c7; }
+        .avalado-por { margin-top: 2rem; padding: 1rem; background-color: #ecf0f1; border-left: 5px solid #3498db; }
+
+        /* --- ESTILOS DE LA CALCULADORA DE CORTOCIRCUITO --- */
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 500; font-size: 0.875rem; }
+        .input-group input, .input-group select { width: 100%; padding: 0.75rem; border: 1px solid #d2d6dc; border-radius: 0.5rem; transition: border-color 0.2s, box-shadow 0.2s; }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--brand-color); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4); }
+        .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; border: none; }
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
+        .result-card { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; margin-top: 1rem; }
+        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #e5e7eb; }
+        .result-item:last-child { border-bottom: none; }
+        .log-box { background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; color: #1f2937; max-height: 200px; overflow-y: auto;}
+        details > summary { cursor: pointer; font-weight: 500; color: #374151; }
+        .section-divider { border-bottom: 1px solid #e5e7eb; margin-bottom: 1.5rem; padding-bottom: 1.5rem; }
+        .anexo-box { background-color: var(--brand-color-light); border-top: 3px solid var(--brand-color); padding: 2rem; margin-top: 3rem; border-radius: 0.75rem; }
+        .anexo-box h3 { font-size: 1.75rem; font-weight: 700; color: #4338ca; margin-bottom: 1.5rem; }
+        .anexo-box h4 { font-size: 1.25rem; font-weight: 600; color: #4338ca; margin-bottom: 0.75rem; margin-top: 1.5rem; }
+        .anexo-box p { color: #374151; line-height: 1.6; }
+        #seccion-cortocircuito table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.9rem; background-color: white; }
+        #seccion-cortocircuito th, #seccion-cortocircuito td { padding: 0.75rem; border: 1px solid #d1d5db; text-align: center;}
+        #seccion-cortocircuito th { background-color: #e5e7eb; font-weight: 600; }
+        .calculation-log-entry { padding: 0.75rem; border-bottom: 1px solid #e5e7eb; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.5; }
+        .calculation-log-entry:last-child { border-bottom: none; }
+        .calculation-log-entry strong { color: var(--brand-color); }
+        .feeder-node { border: 2px solid var(--brand-color); border-radius: 0.75rem; padding: 1.5rem; margin-top: 1.5rem; background-color: #fafbff; }
+        .cable-node { border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 1rem; margin-top: 1rem; background-color: white; }
+        .node-actions { margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: flex-end; }
+        .node-name-input { background-color: transparent; border: none; font-weight: bold; width: 100%; padding: 2px; border-radius: 3px; }
+        .node-name-input:hover { background-color: #f0f4ff; }
+        .node-name-input:focus { outline: none; box-shadow: 0 0 0 2px var(--brand-color); }
+        .input-error { border-color: #ef4444 !important; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4) !important; }
+        .diagram-container { display: flex; flex-direction: column; align-items: center; font-family: 'Courier New', monospace; font-size: 13px; padding: 1rem; background-color: #fff; }
+        .diagram-line { width: 2px; background-color: var(--line-color); flex-shrink: 0; }
+        .diagram-bus { width: 100%; height: 5px; background-color: var(--line-color); margin: 0; position: relative; }
+        .diagram-children-wrapper { display: flex; flex-direction: row; justify-content: space-around; align-items: flex-start; width: 100%; gap: 24px; }
+        .diagram-branch { display: flex; flex-direction: column; align-items: center; flex-grow: 1; min-width: 140px; position: relative; }
+        .diagram-label { color: #555; font-size: 11px; white-space: nowrap; }
+        .diagram-icon-wrapper { position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: 40px; }
+        .diagram-icon { height: 32px; width: auto; background-color: #fff; padding: 0 2px; z-index: 1; }
+        .diagram-fault-icon { height: 20px; width: auto; flex-shrink: 0; margin-left: 8px; z-index: 2; }
+        .diagram-line-through { position: absolute; width: 2px; height: 100%; background-color: var(--line-color); z-index: 0; }
+        #diagramModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        #diagramModalContent { background-color: #fff; padding: 20px; border-radius: 10px; max-width: 95vw; max-height: 95vh; overflow: auto; }
+        #closeDiagramModal { position: absolute; top: 15px; right: 25px; font-size: 35px; color: white; cursor: pointer; }
+
+        /* --- ESTILOS DE LA CALCULADORA DE CABLES --- */
+        #seccion-cables .result-line { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
+        #seccion-cables .result-line:last-child { border-bottom: none; }
+        #seccion-cables .loader { border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #3498db; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #seccion-cables .tab-button-cables.active { border-bottom-color: #3b82f6; color: #3b82f6; font-weight: 600; }
+        #seccion-cables .ok-icon { color: #22c55e; }
+        #seccion-cables .fail-icon { color: #ef4444; }
+        #seccion-cables .log-entry { padding: 4px 8px; margin-bottom: 4px; border-left-width: 4px; border-radius: 4px; }
+        #seccion-cables .log-step { border-color: #60a5fa; background-color: #eff6ff; }
+        #seccion-cables .log-pass { border-color: #34d399; background-color: #f0fdf4; }
+        #seccion-cables .log-fail { border-color: #f87171; background-color: #fef2f2; }
+        #seccion-cables .log-final { border-color: #a78bfa; background-color: #f5f3ff; font-weight: bold; }
+        #seccion-cables .log-manual { border-color: #facc15; background-color: #fffbeb; }
+        #seccion-cables .log-header { border-top: 2px solid #9ca3af; border-bottom: 2px solid #9ca3af; margin-top: 1rem; margin-bottom: 0.5rem; padding: 0.5rem; background-color: #e5e7eb; font-weight: bold; text-align: center; }
+
+        /* --- ESTILOS DE LA CALCULADORA DE PUESTA A TIERRA --- */
+        #seccion-tierra { background-color: #111827; color: #d1d5db; }
+        #seccion-tierra .tab-button.active { border-color: #3b82f6; color: #3b82f6; background-color: #1f2937; }
+        #seccion-tierra .tab-button { border-color: #4b5563; }
+        #seccion-tierra .result-section, #seccion-tierra .mode-section, #seccion-tierra .electrode-params { display: none; }
+        #seccion-tierra .loader { border: 4px solid #4b5563; border-top: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        #seccion-tierra #export-content { position: absolute; left: -9999px; top: -9999px; }
+        #seccion-tierra .sector-card, #seccion-tierra .info-card { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        #seccion-tierra .tooltip-container { position: relative; display: inline-block; cursor: help; }
+        #seccion-tierra .tooltip-icon { font-size: 10px; padding: 2px 6px; border-radius: 50%; background-color: #4b5563; color: white; margin-left: 5px; user-select: none; }
+        #seccion-tierra .tooltip-text { visibility: hidden; width: 250px; background-color: #1f2937; color: #fff; text-align: left; border-radius: 6px; padding: 10px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; border: 1px solid #4b5563; font-size: 0.8rem; pointer-events: none; }
+        #seccion-tierra .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+        #seccion-tierra ::-webkit-scrollbar { width: 8px; }
+        #seccion-tierra ::-webkit-scrollbar-track { background: #1f2937; }
+        #seccion-tierra ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        #seccion-tierra ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    </style>
 </head>
-
 <body>
 
-
-
-    <header>
-
-        <h1>Calculadoras Técnicas Eléctricas</h1>
-
-        <p>Herramienta unificada para cálculos de Cables, Puesta a Tierra y Cortocircuito.</p>
-
-    </header>
-
-
-
-    <nav>
-
-        <a href="#" id="nav-inicio" class="active">Inicio</a>
-
-        <a href="#" id="nav-cables">Cálculo de Cables</a>
-
-        <a href="#" id="nav-tierra">Puesta a Tierra</a>
-
-        <a href="#" id="nav-cortocircuito">Cortocircuito</a>
-
-        <a href="#" id="nav-creditos">Créditos</a>
-
-    </nav>
-
-
-
-    <main>
-
-        <!-- SECCIÓN DE INICIO -->
-
-        <section id="seccion-inicio">
-
-            <h2>Bienvenido a la Suite de Cálculo Eléctrico</h2>
-
-            <p>Este proyecto unifica tres herramientas esenciales para el cálculo eléctrico profesional, basadas en la reglamentación argentina (AEA) y normas IRAM.</p>
-
-            <p>Navega a través de las diferentes calculadoras utilizando el menú superior. Cada herramienta está diseñada para ser intuitiva y proporcionar resultados detallados para tus proyectos.</p>
-
-            <div class="avalado-por">
-
-                <p><strong>Avalado por:</strong> [Nombre de la Institución, Empresa o Profesional]</p>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ====================================================================== -->
-
-        <!-- CALCULADORA DE SELECCIÓN DE CABLES -->
-
-        <!-- ====================================================================== -->
-
-        <section id="seccion-cables" class="hidden">
-
-            <div class="container mx-auto">
-
-                <header class="text-center mb-8">
-
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Calculadora Eléctrica Avanzada</h1>
-
-                    <p class="text-md text-gray-600 mt-2">Basada en Normas IRAM y Reglamentación AEA 90364</p>
-
-                </header>
-
-        
-
-                <!-- CALCULADORA DE CIRCUITOS -->
-
-                <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-
-                    <h2 class="text-2xl font-bold mb-2 text-blue-700">1. Calculadora de Circuitos</h2>
-
-                    <p class="text-sm text-gray-500 mb-6">Complete todos los datos para realizar un cálculo integral (Icc, Icarga y ΔU) y añadir el circuito a la lista.</p>
-
-        
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
-                        <!-- Columna 1 -->
-
-                        <div>
-
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Datos de la Carga</h3>
-
-                            <div class="space-y-4">
-
-                                <div><label for="potencia" class="block text-sm font-medium">Potencia (kW)</label><input type="number" id="potencia" value="5" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                                <div><label for="tension" class="block text-sm font-medium">Tensión (V)</label><select id="tension" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="220">220V</option><option value="380" selected>380V</option></select></div>
-
-                                <div><label for="cosphi" class="block text-sm font-medium">cos φ</label><input type="number" id="cosphi" value="0.9" step="0.01" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Columna 2 -->
-
-                        <div>
-
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Instalación</h3>
-
-                            <div class="space-y-4">
-
-                                <div><label for="longitud" class="block text-sm font-medium">Longitud (m)</label><input type="number" id="longitud" value="50" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                                <div><label for="tipoCable" class="block text-sm font-medium">Cable</label><select id="tipoCable" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="IRAM 2178-XLPE-Cu" selected>IRAM 2178 (XLPE/Cu)</option><option value="IRAM 2178-PVC-Cu">IRAM 2178 (PVC/Cu)</option><option value="IRAM 247-PVC-Cu">IRAM 247-3 (PVC/Cu)</option><option value="IRAM 2178-XLPE-Al">IRAM 2178 (XLPE/Al)</option><option value="IRAM 2178-PVC-Al">IRAM 2178 (PVC/Al)</option></select></div>
-
-                                <div><label for="tipoTendido" class="block text-sm font-medium">Tendido</label><select id="tipoTendido" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="B1">B1/B2 (Cañería)</option><option value="C" selected>C (Bandeja no perf.)</option><option value="E">E (Bandeja perf.)</option><option value="F">F (Trébol en bandeja)</option></select></div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Columna 3 -->
-
-                        <div>
-
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Factores y Falla</h3>
-
-                             <div class="space-y-4">
-
-                                 <div><label for="temperatura" class="block text-sm font-medium">Temp. (°C)</label><input type="number" id="temperatura" value="40" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                                 <div><label for="agrupamiento" class="block text-sm font-medium">Agrup.</label><input type="number" id="agrupamiento" value="1" min="1" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                                 <div><label for="icc" class="block text-sm font-medium">Icc a Soportar (kA)</label><input type="number" id="icc" value="10" step="0.1" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Columna 4 -->
-
-                         <div>
-
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Proyecto</h3>
-
-                            <div class="space-y-4">
-
-                                <div><label for="tiempoActuacion" class="block text-sm font-medium">T. Prot. (s)</label><input type="number" id="tiempoActuacion" value="0.1" step="0.01" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                                <div><label for="caidaTensionAdm" class="block text-sm font-medium">ΔU Adm (%)</label><select id="caidaTensionAdm" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="3">3%</option><option value="5" selected>5%</option><option value="15">15%</option></select></div>
-
-                                <div><label for="nombreCircuito" class="block text-sm font-medium">Nombre</label><input type="text" id="nombreCircuito" placeholder="Ej: Bomba Piscina" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="flex justify-end gap-4 border-t pt-4">
-
-                        <button id="add-circuit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700">Calcular y Añadir</button>
-
-                    </div>
-
-                     <div id="resultado-cable" class="mt-6 hidden"></div>
-
-                     <!-- Nueva sección de análisis manual -->
-
-                     <div id="manual-analysis-section" class="mt-6 hidden">
-
-                         <h3 class="text-lg font-semibold mb-2 text-gray-800 border-t pt-4">Análisis Manual de Secciones</h3>
-
-                            <div class="flex items-end gap-4">
-
-                                 <div class="flex-grow">
-
-                                     <label for="seccion-manual-select" class="block text-sm font-medium">Seleccione una sección para probar</label>
-
-                                     <select id="seccion-manual-select" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></select>
-
-                                 </div>
-
-                                 <button id="probar-seccion-btn" class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700">Probar Sección</button>
-
-                            </div>
-
-                            <div id="resultado-manual" class="mt-4"></div>
-
-                     </div>
-
-                </div>
-
-                
-
-                <div class="mb-8">
-
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-
-                        <h2 class="text-2xl font-bold text-gray-800">2. Lista de Circuitos del Proyecto</h2>
-
-                        <div class="flex gap-2">
-
-                            <button id="export-csv" class="px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">Exportar a CSV</button>
-
-                            <button id="clear-list" class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-700">Limpiar Lista</button>
-
-                        </div>
-
-                    </div>
-
-                    <div id="lista-circuitos" class="space-y-4">
-
-                         <p id="empty-list-message" class="text-center text-gray-500 py-8 bg-white rounded-xl shadow-sm">Aún no se han añadido circuitos.</p>
-
-                    </div>
-
-                </div>
-
-        
-
-                <div>
-
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4">3. Anexos y Tablas de Referencia</h2>
-
-                    <div class="bg-white p-6 rounded-xl shadow-lg">
-
-                        <div class="border-b border-gray-200">
-
-                            <nav class="-mb-px flex space-x-6 overflow-x-auto" id="tab-container-cables">
-
-                                <button data-tab="tab-formulas" class="tab-button-cables active py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Fórmulas</button>
-
-                                <button data-tab="tab-log" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Memoria de Cálculo</button>
-
-                                <button data-tab="tab-k1" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Tabla k1</button>
-
-                                <button data-tab="tab-k2" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Tabla k2</button>
-
-                                <button data-tab="tab-kicc" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Tabla k (Icc)</button>
-
-                            </nav>
-
-                        </div>
-
-                        <div id="tab-content-cables" class="pt-6"></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            
-
-            <template id="circuit-card-template">
-
-                <div class="bg-white p-4 rounded-lg shadow-md border-l-4">
-
-                    <div class="flex justify-between items-start">
-
-                        <div>
-
-                            <h4 class="font-bold text-lg text-gray-800"></h4>
-
-                            <p class="text-sm text-gray-500"></p>
-
-                        </div>
-
-                        <button class="remove-card text-gray-400 hover:text-red-500 text-2xl leading-none">&times;</button>
-
-                    </div>
-
-                    <div class="mt-2 pt-2 border-t text-sm grid grid-cols-2 md:grid-cols-4 gap-2">
-
-                        <div><span class="font-semibold">Sección:</span> <span class="data-seccion"></span></div>
-
-                        <div><span class="font-semibold">I<sub>carga</sub>:</span> <span class="data-icarga"></span></div>
-
-                        <div><span class="font-semibold">I<sub>adm</sub>:</span> <span class="data-iadm"></span></div>
-
-                        <div><span class="font-semibold">ΔU:</span> <span class="data-delta-u"></span></div>
-
-                    </div>
-
-                </div>
-
-            </template>
-
-        </section>
-
-
-
-        <!-- ====================================================================== -->
-
-        <!-- CALCULADORA DE PUESTA A TIERRA -->
-
-        <!-- ====================================================================== -->
-
-        <section id="seccion-tierra" class="hidden">
-
-            <div class="container mx-auto p-4 md:p-8 relative">
-
-                <header class="text-center mb-8">
-
-                    <h1 class="text-3xl md:text-4xl font-bold text-white">Planificador de Puesta a Tierra (Esquema TT)</h1>
-
-                    <p class="text-gray-400 mt-2">Diseño de proyecto según reglamentación AEA 90364. v2.2</p>
-
-                </header>
-
-        
-
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-
-        
-
-                    <!-- Columna de Parámetros -->
-
-                    <div class="md:col-span-4 bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-
-                        <div>
-
-                            <label for="mode_selector" class="block text-sm font-medium text-gray-300 mb-2">Modo de Calculadora</label>
-
-                            <select id="mode_selector" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
-
-                                <option value="domiciliaria">Verificación Domiciliaria</option>
-
-                                <option value="proyecto">Proyecto Completo (Multi-Sector)</option>
-
-                            </select>
-
-                        </div>
-
-                        
-
-                        <hr class="border-gray-600 my-6">
-
-        
-
-                        <!-- Parámetros Comunes -->
-
-                        <div class="space-y-6">
-
-                            <h2 class="text-2xl font-semibold -mt-2">1. Parámetros Generales</h2>
-
-                            <div>
-
-                                <label class="block text-sm font-medium text-gray-300 mb-2">
-
-                                    Condiciones / Tensión Límite ($U_L$)
-
-                                    <span class="tooltip-container">
-
-                                        <span class="tooltip-icon">?</span>
-
-                                        <span class="tooltip-text">Tensión máxima a la que puede quedar sometida una persona indefinidamente. 24V para locales húmedos/exteriores o sin supervisión. 50V para locales secos con personal instruido.</span>
-
-                                    </span>
-
-                                </label>
-
-                                <select id="ul_condition" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
-
-                                    <option value="24" selected>Común / Sin supervisión (UL = 24V)</option>
-
-                                    <option value="50">Seco / Personal capacitado (UL = 50V)</option>
-
-                                </select>
-
-                            </div>
-
-                            <div>
-
-                                <label for="tipo_suelo" class="block text-sm font-medium text-gray-300 mb-2">
-
-                                    Resistividad Base del Terreno (ρ)
-
-                                     <span class="tooltip-container">
-
-                                        <span class="tooltip-icon">?</span>
-
-                                        <span class="tooltip-text">Oposición del suelo al paso de corriente. Varía según el tipo de suelo. Seleccione un valor de tabla o ingrese uno medido.</span>
-
-                                    </span>
-
-                                </label>
-
-                                <select id="tipo_suelo" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 mb-2">
-
-                                    <option value="10" selected>Arcillas (10 Ω·m)</option>
-
-                                    <option value="5">Aluvial (5 Ω·m)</option>
-
-                                    <option value="20">Greda (20 Ω·m)</option>
-
-                                    <option value="50">T. calcárea (50 Ω·m)</option>
-
-                                    <option value="100">Arenisca (100 Ω·m)</option>
-
-                                    <option value="custom">Ingresar valor manual...</option>
-
-                                </select>
-
-                                <input type="number" id="resistividad_manual" placeholder="Ej: 80" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 hidden">
-
-                            </div>
-
-                             <div>
-
-                                <label for="humedad_terreno" class="block text-sm font-medium text-gray-300 mb-2">
-
-                                    Condiciones de Humedad del Terreno
-
-                                     <span class="tooltip-container">
-
-                                        <span class="tooltip-icon">?</span>
-
-                                        <span class="tooltip-text">Ajusta la resistividad base. La humedad reduce la resistividad. 'Seco' aumenta el valor, 'Húmedo' lo reduce.</span>
-
-                                    </span>
-
-                                </label>
-
-                                <select id="humedad_terreno" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
-
-                                    <option value="1.5">Seco (aumenta resistividad)</option>
-
-                                    <option value="1.0" selected>Normal (valor base)</option>
-
-                                    <option value="0.7">Húmedo (reduce resistividad)</option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-                        
-
-                        <!-- Modo Domiciliaria -->
-
-                        <div id="mode_domiciliaria" class="mode-section mt-8 space-y-6">
-
-                            <h2 class="text-2xl font-semibold border-b border-gray-600 pb-3">2. Puesta a Tierra a Verificar</h2>
-
-                            <div class="space-y-3">
-
-                                 <label class="text-sm font-medium text-gray-300">Sensibilidad Diferencial (IΔn)</label>
-
-                                 <select id="domiciliaria_rcd" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
-
-                                     <option value="30" selected>30 mA</option><option value="100">100 mA</option><option value="300">300 mA</option>
-
-                                     <option value="500">500 mA</option><option value="1000">1 A</option>
-
-                                 </select>
-
-                                 <div class="mt-2">
-
-                                     <label class="flex items-center space-x-2 text-sm cursor-pointer">
-
-                                         <input type="checkbox" id="domiciliaria_manual_obj_check" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-500 rounded">
-
-                                         <span>Usar objetivo manual de resistencia</span>
-
-                                     </label>
-
-                                     <input type="number" id="domiciliaria_manual_obj_input" placeholder="Ej: 5 Ω" class="w-full bg-gray-600 border-gray-500 rounded-md px-3 py-1.5 mt-2 hidden">
-
-                                 </div>
-
-                            </div>
-
-                            <div>
-
-                                <label class="text-sm font-medium text-gray-300">Tipo de Electrodo</label>
-
-                                <select id="domiciliaria_electrode_type" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 mt-2">
-
-                                    <option value="jabalina_v" selected>Jabalina Vertical</option>
-
-                                    <option value="jabalina_h">Jabalina Horizontal</option>
-
-                                    <option value="placa">Placa</option>
-
-                                    <option value="malla">Malla</option>
-
-                                </select>
-
-                            </div>
-
-                            <!-- Parámetros Jabalina Vertical -->
-
-                            <div id="domiciliaria_jabalina_v_params" class="electrode-params space-y-2">
-
-                                 <label class="text-sm font-medium text-gray-300">Dimensiones Jabalina</label>
-
-                                 <div class="grid grid-cols-2 gap-2">
-
-                                     <select id="domiciliaria_l" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"><option value="1.5">1.5m</option><option value="3" selected>3m</option></select>
-
-                                     <select id="domiciliaria_d" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"><option value="0.0127">1/2"</option><option value="0.0158">5/8"</option><option value="0.01905" selected>3/4"</option></select>
-
-                                 </div>
-
-                            </div>
-
-                            <!-- Parámetros Jabalina Horizontal -->
-
-                            <div id="domiciliaria_jabalina_h_params" class="electrode-params space-y-2">
-
-                                <label class="text-sm font-medium text-gray-300">Dimensiones Conductor Horizontal (m)</label>
-
-                                <div class="grid grid-cols-2 gap-2">
-
-                                    <input type="number" id="domiciliaria_h_l" value="10" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2" placeholder="Longitud">
-
-                                    <input type="number" id="domiciliaria_h_p" value="0.5" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2" placeholder="Profundidad">
-
-                                </div>
-
-                            </div>
-
-                            <!-- Parámetros Placa -->
-
-                            <div id="domiciliaria_placa_params" class="electrode-params space-y-2">
-
-                                <label class="text-sm font-medium text-gray-300">Dimensiones Placa (m)</label>
-
-                                <div class="grid grid-cols-2 gap-2">
-
-                                   <input type="number" id="domiciliaria_placa_a" value="1" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2" placeholder="Lado A">
-
-                                   <input type="number" id="domiciliaria_placa_b" value="1" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2" placeholder="Lado B">
-
-                                </div>
-
-                            </div>
-
-                             <!-- Parámetros Malla -->
-
-                            <div id="domiciliaria_malla_params" class="electrode-params space-y-2">
-
-                                <label class="text-sm font-medium text-gray-300">Dimensiones Malla (m)</label>
-
-                                <div class="grid grid-cols-2 gap-2">
-
-                                    <input type="number" id="domiciliaria_malla_l" value="5" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2" placeholder="Longitud Total Conductor">
-
-                                    <input type="number" id="domiciliaria_malla_A" value="4" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2" placeholder="Área (m²)">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-        
-
-                        <!-- Modo Proyecto -->
-
-                        <div id="mode_proyecto" class="mode-section mt-8">
-
-                             <div class="space-y-6">
-
-                                 <h2 class="text-2xl font-semibold border-b border-gray-600 pb-3">2. Puesta a Tierra de Servicio (RB)</h2>
-
-                                 <p class="text-xs text-gray-400 -mt-2">Sistema para el neutro de la acometida. Objetivo ≤ 1.0 Ω por defecto.</p>
-
-                                 <div>
-
-                                     <label class="text-sm font-medium text-gray-300">Jabalina para Servicio</label>
-
-                                     <div class="grid grid-cols-2 gap-2 mt-2">
-
-                                         <select id="proyecto_service_l" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"><option value="1.5">1.5m</option><option value="3" selected>3m</option></select>
-
-                                         <select id="proyecto_service_d" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"><option value="0.0127">1/2"</option><option value="0.0158">5/8"</option><option value="0.01905" selected>3/4"</option></select>
-
-                                     </div>
-
-                                 </div>
-
-                                 <div>
-
-                                     <label class="flex items-center space-x-2 text-sm cursor-pointer">
-
-                                         <input type="checkbox" id="proyecto_service_manual_check" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-500 rounded">
-
-                                         <span>Usar objetivo manual</span>
-
-                                     </label>
-
-                                     <input type="number" id="proyecto_service_manual_input" value="1" placeholder="Ej: 0.8 Ω" class="w-full bg-gray-600 border-gray-500 rounded-md px-3 py-1.5 mt-2 hidden">
-
-                                 </div>
-
-                            </div>
-
-                            <h2 class="text-2xl font-semibold border-b border-gray-600 pb-3 mb-4 mt-8">3. Sectores de Protección (RA)</h2>
-
-                            <div id="sectores-container" class="space-y-4"></div>
-
-                            <button id="addSectorBtn" class="mt-4 w-full flex items-center justify-center py-2 px-4 border border-dashed border-gray-500 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:border-white transition">
-
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-
-                                Añadir Sector
-
-                            </button>
-
-                        </div>
-
-        
-
-                        <button id="calcularBtn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg mt-8 hover:bg-blue-700 transition-colors"></button>
-
-                    </div>
-
-        
-
-                    <!-- Columna de Resultados -->
-
-                    <div class="md:col-span-8">
-
-                        <div id="results-container" class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg min-h-full" style="display: none;"></div>
-
-                        <div id="initial-message" class="flex items-center justify-center bg-gray-800 p-6 rounded-xl border-2 border-dashed border-gray-700 min-h-full">
-
-                            <div class="text-center">
-
-                                <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-
-                                <h3 class="mt-2 text-lg font-medium text-white">Listo para Planificar</h3>
-
-                                <p class="mt-1 text-sm text-gray-400">Seleccione el modo, complete los parámetros y presione "Calcular".</p>
-
-                            </div>
-
-                        </div>
-
-                        <div id="loader-container" class="hidden items-center justify-center bg-gray-800 p-6 rounded-xl"><div class="loader"></div></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <textarea id="export-content"></textarea>
-
-        </section>
-
-
-
-        <!-- ====================================================================== -->
-
-        <!-- CALCULADORA DE CORTOCIRCUITO -->
-
-        <!-- ====================================================================== -->
-
-        <section id="seccion-cortocircuito" class="hidden">
-
-            <div id="diagramModal">
-
-                <span id="closeDiagramModal">&times;</span>
-
-                <div id="diagramModalContent"></div>
-
-            </div>
-
-        
-
-            <div class="container mx-auto p-4 md:p-8 max-w-screen-2xl">
-
-                <header class="text-center mb-8 relative">
-
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Calculadora de Cortocircuito Profesional</h1>
-
-                    <p class="text-md text-gray-600 mt-2">Análisis con Diagrama Unifilar Dinámico</p>
-
-                </header>
-
-        
-
-                <div class="mb-12">
-
-                    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800 border-b pb-3">Análisis de Impedancia de Falla</h2>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-
-                        
-
-                        <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-2">
-
-                            <form id="shortCircuitForm">
-
-                                <div class="section-divider">
-
-                                    <h3 class="text-xl font-semibold mb-4 text-gray-800">1. Red de Distribución (MT)</h3>
-
-                                    <div class="input-group"><label for="sccRed">Scc Red [MVA]</label><input type="number" id="sccRed" value="250" min="1" class="data-input"></div>
-
-                                    <div class="input-group"><label for="tensionRed">Tensión Red [kV]</label><input type="number" id="tensionRed" value="13.2" min="1" class="data-input"></div>
-
-                                </div>
-
-        
-
-                                <div id="transformerFeedersContainer"></div>
-
-                                
-
-                                <div class="mt-6 flex space-x-4">
-
-                                    <button type="button" id="addFeederBtn" class="btn bg-purple-600 hover:bg-purple-700 text-white w-full">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" /></svg>
-
-                                        Agregar Alimentador
-
-                                    </button>
-
-                                     <button type="button" id="resetButtonSC" class="btn bg-red-600 hover:bg-red-700 text-white">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
-
-                                        Reiniciar
-
-                                    </button>
-
-                                </div>
-
-                            </form>
-
-                        </div>
-
-        
-
-                        <div class="space-y-8 lg:col-span-3">
-
-                            <div id="diagramCard" class="bg-white p-6 rounded-xl shadow-md">
-
-                                <div class="flex justify-between items-center mb-4">
-
-                                    <h3 class="text-xl font-semibold text-gray-800">Diagrama Unifilar</h3>
-
-                                    <button id="fullscreenDiagramBtn" class="btn btn-sm bg-gray-200 hover:bg-gray-300 text-gray-700" title="Ver en Pantalla Completa">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5" /></svg>
-
-                                    </button>
-
-                                </div>
-
-                                <div id="diagramContainerWrapper" class="p-4 border rounded-lg bg-gray-50 min-h-[400px] overflow-x-auto">
-
-                                    <div id="diagramContainer"></div>
-
-                                </div>
-
-                            </div>
-
-                            <div id="resultsContainerSC" class="bg-white p-6 rounded-xl shadow-md">
-
-                                <div class="flex justify-between items-center"><h3 class="text-xl font-semibold mb-4 text-gray-800">Resultados</h3>
-
-                                    <div class="flex gap-2">
-
-                                         <button id="exportWordBtn" class="btn bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 px-3">Word</button>
-
-                                         <button id="exportSCBtn" class="btn bg-green-600 hover:bg-green-700 text-white text-sm py-2 px-3">CSV</button>
-
-                                    </div>
-
-                                </div>
-
-                                <div id="resultsPlaceholderSC" class="text-center text-gray-500 py-10"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><p class="mt-4">Agregue un alimentador para comenzar.</p></div>
-
-                                <div id="resultsContentSC"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-        
-
-                <div id="anexo" class="anexo-box">
-
-                    <h3>Anexo Técnico</h3>
-
-                    <div>
-
-                        <h4>Fundamentos Normativos (IRAM / AEA)</h4>
-
-                        <p>El cálculo de corrientes de cortocircuito es un requisito fundamental de la <strong>Reglamentación para la Ejecución de Instalaciones Eléctricas en Inmuebles AEA 90364</strong>. El objetivo es asegurar que todos los componentes de la instalación (cables, interruptores, tableros) puedan soportar los esfuerzos térmicos y dinámicos producidos por una falla. Esta calculadora aplica el <strong>método de las impedancias</strong>, que consiste en sumar todas las impedancias (Red, transformadores, cables) desde la fuente hasta el punto de falla para determinar la corriente de cortocircuito máxima (Icc). La verificación del cable se realiza según la fórmula de solicitación térmica adiabática (I²t), especificada en la norma <strong>IRAM 2178</strong>, asegurando que la energía que el cable puede soportar ($K^2S^2$) sea mayor a la energía que deja pasar la protección ($I_{cc}^2t$).</p>
-
-                    </div>
-
-                     <div>
-
-                        <h4>Aporte de Motores al Cortocircuito</h4>
-
-                        <p>Durante un cortocircuito, la tensión del sistema cae bruscamente. En ese instante, los motores de inducción, por su inercia y el campo magnético remanente en su rotor, dejan de consumir energía y comienzan a funcionar como generadores, aportando corriente a la falla. Este aporte es de corta duración (típicamente unos pocos ciclos) pero significativo. Según la bibliografía técnica, se estima que un motor puede aportar una corriente de entre <strong>4 a 6 veces su corriente nominal (In)</strong>. Esta calculadora utiliza un factor conservador de 5. Es crucial considerar este aporte, ya que la corriente total que debe interrumpir una protección en un tablero no es solo la que proviene de la red, sino la suma de la corriente de la red más la de todos los motores aguas abajo del punto de falla.</p>
-
-                    </div>
-
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-
-                         <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Factor de Impulso χ (Kappa)</h4> <div class="overflow-x-auto"> <table id="kappaTable"></table> </div> </div>
-
-                         <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Valores Típicos para Transformadores</h4> <div class="overflow-x-auto"> <table id="trafoTable"></table> </div> </div>
-
-                    </div>
-
-                    <div class="mt-8">
-
-                        <h4 class="text-lg font-semibold mb-2 text-indigo-700">Memoria de Cálculo (Paso a Paso)</h4>
-
-                        <div id="calculationLogContainer" class="bg-white p-4 rounded-lg shadow-inner max-h-96 overflow-y-auto">
-
-                            <p class="text-gray-500 p-4 text-center">El detalle del cálculo aparecerá aquí.</p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- SECCIÓN DE CRÉDITOS -->
-
-        <section id="seccion-creditos" class="hidden">
-
-            <h2>Créditos</h2>
-
-            <p>Este proyecto fue desarrollado por [Tu Nombre o el Nombre de tu Equipo].</p>
-
-            <p>Agradecimientos especiales a [Nombres, si aplica].</p>
-
-            <p>Versión 1.0 - 2024</p>
-
-        </section>
-
-    </main>
-
-
-
-    <footer>
-
-        <p>&copy; 2024 [Tu Nombre o Empresa] - Todos los derechos reservados.</p>
-
-    </footer>
-
-
-
-    <!-- ====================================================================== -->
-
-    <!-- SCRIPT UNIFICADO -->
-
-    <!-- ====================================================================== -->
-
-    <script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-
-
-
-        // --- LÓGICA DE NAVEGACIÓN PRINCIPAL ---
-
-        const navLinks = document.querySelectorAll('nav a');
-
-        const sections = document.querySelectorAll('main > section');
-
-
-
-        function showSection(sectionId) {
-
-            sections.forEach(section => {
-
-                section.classList.toggle('hidden', section.id !== sectionId);
-
-            });
-
-            // Si la sección es la de puesta a tierra, refrescar MathJax
-
-            if (sectionId === 'seccion-tierra' && window.MathJax) {
-
-                MathJax.typesetPromise();
-
-            }
-
-        }
-
-
-
-        navLinks.forEach(link => {
-
-            link.addEventListener('click', function(event) {
-
-                event.preventDefault();
-
-                navLinks.forEach(nav => nav.classList.remove('active'));
-
-                this.classList.add('active');
-
-                const sectionId = 'seccion-' + this.id.split('-')[1];
-
-                showSection(sectionId);
-
-            });
-
-        });
-
-
-
-        showSection('seccion-inicio');
-
-
-
-
-
-        // ======================================================================
-
-        // --- INICIO: CÓDIGO DE LA CALCULADORA DE SELECCIÓN DE CABLES ---
-
-        // ======================================================================
-
-        (() => {
-
-            const cableData = {'IRAM 2178-XLPE-Cu':{aislacion:'XLPE',material:'Cu',k_icc:143,resistencias:[{s:1.5,r:16.96,x:.115},{s:2.5,r:10.18,x:.115},{s:4,r:6.31,x:.115},{s:6,r:4.21,x:.107},{s:10,r:2.44,x:.107},{s:16,r:1.54,x:.1},{s:25,r:.995,x:.1},{s:35,r:.707,x:.095},{s:50,r:.493,x:.091},{s:70,r:.348,x:.086},{s:95,r:.264,x:.083},{s:120,r:.207,x:.081},{s:150,r:.167,x:.079},{s:185,r:.138,x:.079},{s:240,r:.106,x:.076},{s:300,r:.086,x:.076},{s:400,r:.068,x:.075},{s:500,r:.055,x:.075},{s:630,r:.045,x:.074}],corrientes:{B1:{mono:[{s:1.5,i:20},{s:2.5,i:27},{s:4,i:36},{s:6,i:46},{s:10,i:63},{s:16,i:83},{s:25,i:108},{s:35,i:133},{s:50,i:159},{s:70,i:201},{s:95,i:241},{s:120,i:278},{s:150,i:304},{s:185,i:349},{s:240,i:418},{s:300,i:484,x:.083}],tri:[{s:1.5,i:18},{s:2.5,i:24},{s:4,i:32},{s:6,i:40},{s:10,i:55},{s:16,i:73},{s:25,i:96},{s:35,i:116},{s:50,i:140},{s:70,i:177},{s:95,i:212},{s:120,i:244},{s:150,i:273},{s:185,i:309},{s:240,i:362},{s:300,i:414}]},C:{mono:[{s:1.5,i:22},{s:2.5,i:30},{s:4,i:41},{s:6,i:53},{s:10,i:71},{s:16,i:97},{s:25,i:126},{s:35,i:156},{s:50,i:190},{s:70,i:245},{s:95,i:298},{s:120,i:348},{s:150,i:401},{s:185,i:460},{s:240,i:545},{s:300,i:631},{s:400,i:749},{s:500,i:861}],tri:[{s:1.5,i:20},{s:2.5,i:27},{s:4,i:36},{s:6,i:47},{s:10,i:65},{s:16,i:87},{s:25,i:108},{s:35,i:134},{s:50,i:163},{s:70,i:208},{s:95,i:253},{s:120,i:293},{s:150,i:338},{s:185,i:386},{s:240,i:455},{s:300,i:524},{s:400,i:615},{s:500,i:700}]},E:{mono:[{s:1.5,i:24},{s:2.5,i:33},{s:4,i:45},{s:6,i:57},{s:10,i:78},{s:16,i:105},{s:25,i:136},{s:35,i:168},{s:50,i:205},{s:70,i:263},{s:95,i:320},{s:120,i:373},{s:150,i:430},{s:185,i:493},{s:240,i:583},{s:300,i:674},{s:400,i:855},{s:500,i:986}],tri:[{s:1.5,i:21},{s:2.5,i:29},{s:4,i:38},{s:6,i:49},{s:10,i:68},{s:16,i:91},{s:25,i:116},{s:35,i:144},{s:50,i:175},{s:70,i:224},{s:95,i:271},{s:120,i:315},{s:150,i:363},{s:185,i:415},{s:240,i:490},{s:300,i:565},{s:400,i:749},{s:500,i:861}]}}},
-
-            'IRAM 2178-PVC-Cu':{aislacion:'PVC',material:'Cu',k_icc:115,resistencias:[{s:1.5,r:15.91,x:.115},{s:2.5,r:9.55,x:.115},{s:4,r:5.92,x:.115},{s:6,r:3.95,x:.107},{s:10,r:2.29,x:.107},{s:16,r:1.48,x:.1},{s:25,r:.934,x:.1},{s:35,r:.663,x:.095},{s:50,r:.463,x:.091},{s:70,r:.326,x:.086},{s:95,r:.248,x:.083},{s:120,r:.195,x:.081},{s:150,r:.157,x:.079},{s:185,r:.13,x:.079},{s:240,r:.1,x:.076},{s:300,r:0.082,x:0.076},{s:400,r:.068,x:.075},{s:500,r:.055,x:.075},{s:630,r:.045,x:.074}],corrientes:{B1:{mono:[{s:1.5,i:14},{s:2.5,i:20},{s:4,i:26},{s:6,i:33},{s:10,i:45},{s:16,i:60},{s:25,i:78},{s:35,i:97},{s:50,i:116},{s:70,i:146},{s:95,i:175},{s:120,i:202},{s:150,i:224},{s:185,i:256},{s:240,i:299},{s:300,i:343}],tri:[{s:1.5,i:13},{s:2.5,i:17},{s:4,i:23},{s:6,i:30},{s:10,i:40},{s:16,i:54},{s:25,i:70},{s:35,i:86},{s:50,i:103},{s:70,i:130},{s:95,i:156},{s:120,i:179},{s:150,i:196},{s:185,i:222},{s:240,i:258},{s:300,i:295}]},C:{mono:[{s:1.5,i:17},{s:2.5,i:23},{s:4,i:31},{s:6,i:40},{s:10,i:55},{s:16,i:74},{s:25,i:97},{s:35,i:120},{s:50,i:146},{s:70,i:185},{s:95,i:224},{s:120,i:260},{s:150,i:299},{s:185,i:341},{s:240,i:401},{s:300,i:461}],tri:[{s:1.5,i:15},{s:2.5,i:21},{s:4,i:28},{s:6,i:36},{s:10,i:50},{s:16,i:66},{s:25,i:84},{s:35,i:104},{s:50,i:125},{s:70,i:160},{s:95,i:194},{s:120,i:225},{s:150,i:260},{s:185,i:297},{s:240,i:351},{s:300,i:404}]},E:{mono:[{s:1.5,i:19},{s:2.5,i:26},{s:4,i:35},{s:6,i:44},{s:10,i:61},{s:16,i:82},{s:25,i:104},{s:35,i:129},{s:50,i:157},{s:70,i:202},{s:95,i:245},{s:120,i:285},{s:150,i:330},{s:185,i:378},{s:240,i:447},{s:300,i:516}],tri:[{s:1.5,i:16},{s:2.5,i:22},{s:4,i:30},{s:6,i:37},{s:10,i:52},{s:16,i:70},{s:25,i:88},{s:35,i:110},{s:50,i:133},{s:70,i:171},{s:95,i:207},{s:120,i:240},{s:150,i:278},{s:185,i:317},{s:240,i:374},{s:300,i:432}]},F:{tri:[{s:25,i:96},{s:35,i:119},{s:50,i:145},{s:70,i:188},{s:95,i:230},{s:120,i:268},{s:150,i:310},{s:185,i:356},{s:240,i:422},{s:300,i:488},{s:400,i:571},{s:500,i:652},{s:630,i:744}]}}},
-
-            'IRAM 247-PVC-Cu':{aislacion:'PVC',material:'Cu',k_icc:115,resistencias:[{s:1.5,r:15.91,x:.115},{s:2.5,r:9.55,x:.115},{s:4,r:5.92,x:.115},{s:6,r:3.95,x:.107},{s:10,r:2.29,x:.107},{s:16,r:1.48,x:.1},{s:25,r:.934,x:.1},{s:35,r:.663,x:.095},{s:50,r:.463,x:.091}],corrientes:{B1:{mono:[{s:1.5,i:15},{s:2.5,i:21},{s:4,i:28},{s:6,i:36},{s:10,i:50},{s:16,i:66},{s:25,i:88},{s:35,i:108},{s:50,i:131}],tri:[{s:1.5,i:14},{s:2.5,i:18},{s:4,i:25},{s:6,i:32},{s:10,i:44},{s:16,i:59},{s:25,i:77},{s:35,i:96},{s:50,i:117}]},C:null,E:null,F:null}},
-
-            'IRAM 2178-XLPE-Al':{aislacion:'XLPE',material:'Al',k_icc:94,resistencias:[{s:16,r:2.392,x:.1},{s:25,r:1.513,x:.1},{s:35,r:1.093,x:.095},{s:50,r:.8,x:.091},{s:70,r:.558,x:.086},{s:95,r:.403,x:.083},{s:120,r:.321,x:.081},{s:150,r:.262,x:.079},{s:185,r:.209,x:.079},{s:240,r:.161,x:.076},{s:300,r:.128,x:.076},{s:400,r:.102,x:.075},{s:500,r:.084,x:.075},{s:630,r:0.07,x:0.074}],corrientes:{B1:{mono:[{s:16,i:66},{s:25,i:86},{s:35,i:105},{s:50,i:126},{s:70,i:159},{s:95,i:191},{s:120,i:220},{s:150,i:238},{s:185,i:273},{s:240,i:326},{s:300,i:378}],tri:[{s:16,i:58},{s:25,i:76},{s:35,i:94},{s:50,i:113},{s:70,i:142},{s:95,i:171},{s:120,i:197},{s:150,i:218},{s:185,i:248},{s:240,i:289},{s:300,i:331}]},C:{mono:[{s:16,i:76},{s:25,i:92},{s:35,i:115},{s:50,i:140},{s:70,i:180},{s:95,i:219},{s:120,i:255},{s:150,i:295},{s:185,i:338},{s:240,i:399},{s:300,i:462},{s:400,i:584},{s:500,i:674}],tri:[{s:16,i:69},{s:25,i:82},{s:35,i:102},{s:50,i:124},{s:70,i:158},{s:95,i:192},{s:120,i:223},{s:150,i:258},{s:185,i:294},{s:240,i:348},{s:300,i:400},{s:400,i:480},{s:500,i:557}]},E:{mono:[{s:16,i:83},{s:25,i:98},{s:35,i:123},{s:50,i:149},{s:70,i:192},{s:95,i:234},{s:120,i:273},{s:150,i:315},{s:185,i:361},{s:240,i:428},{s:300,i:494},{s:400,i:673},{s:500,i:779}],tri:[{s:16,i:70},{s:25,i:88},{s:35,i:109},{s:50,i:133},{s:70,i:170},{s:95,i:207},{s:120,i:239},{s:150,i:277},{s:185,i:316},{s:240,i:372},{s:300,i:429},{s:400,i:531},{s:500,i:701}]}}},
-
-            'IRAM 2178-PVC-Al':{aislacion:'PVC',material:'Al',k_icc:76,resistencias:[{s:16,r:2.392,x:.1},{s:25,r:1.513,x:.1},{s:35,r:1.093,x:.095},{s:50,r:.8,x:.091},{s:70,r:.558,x:.086},{s:95,r:.403,x:.083},{s:120,r:.321,x:.081},{s:150,r:.262,x:.079},{s:185,r:.209,x:.079},{s:240,r:.161,x:.076},{s:300,r:.128,x:.076},{s:400,r:.102,x:.075},{s:500,r:.084,x:.075},{s:630,r:0.07,x:0.074}],corrientes:{B1:{mono:[{s:16,i:47},{s:25,i:62},{s:35,i:75},{s:50,i:90},{s:70,i:114},{s:95,i:137},{s:120,i:157},{s:150,i:175},{s:185,i:200},{s:240,i:234},{s:300,i:268}],tri:[{s:16,i:42},{s:25,i:54},{s:35,i:67},{s:50,i:80},{s:70,i:101},{s:95,i:121},{s:120,i:139},{s:150,i:153},{s:185,i:173},{s:240,i:202},{s:300,i:231}]},C:{mono:[{s:16,i:57},{s:25,i:72},{s:35,i:90},{s:50,i:109},{s:70,i:139},{s:95,i:170},{s:120,i:197},{s:150,i:227},{s:185,i:259},{s:240,i:306},{s:300,i:353},{s:400,i:458},{s:500,i:531}],tri:[{s:16,i:51},{s:25,i:64},{s:35,i:78},{s:50,i:96},{s:70,i:122},{s:95,i:148},{s:120,i:171},{s:150,i:197},{s:185,i:225},{s:240,i:265},{s:300,i:305},{s:400,i:378},{s:500,i:432}]},E:{mono:[{s:2.5,i:20},{s:4,i:27},{s:6,i:34},{s:10,i:47},{s:16,i:64},{s:25,i:77},{s:35,i:97},{s:50,i:117},{s:70,i:151},{s:95,i:183},{s:120,i:212},{s:150,i:245},{s:185,i:280},{s:240,i:331},{s:300,i:382}],tri:[{s:2.5,i:17},{s:4,i:23},{s:6,i:29},{s:10,i:40},{s:16,i:53},{s:25,i:68},{s:35,i:84},{s:50,i:102},{s:70,i:131},{s:95,i:159},{s:120,i:184},{s:150,i:213},{s:185,i:244},{s:240,i:287},{s:300,i:331}]},F:{tri:[{s:25,i:73},{s:35,i:91},{s:50,i:111},{s:70,i:144},{s:95,i:177},{s:120,i:206},{s:150,i:238},{s:185,i:274},{s:240,i:326},{s:300,i:378},{s:400,i:458},{s:500,i:531},{s:630,i:619}]}}},
-
-            };
-
-            const k1_temp={PVC:[{t:10,f:1.4},{t:15,f:1.34},{t:20,f:1.29},{t:25,f:1.22},{t:30,f:1.15},{t:35,f:1.08},{t:40,f:1},{t:45,f:.91},{t:50,f:.82},{t:55,f:.7},{t:60,f:.57}],XLPE:[{t:10,f:1.26},{t:15,f:1.23},{t:20,f:1.19},{t:25,f:1.14},{t:30,f:1.1},{t:35,f:1.05},{t:40,f:1},{t:45,f:.96},{t:50,f:.9},{s:55,f:.84},{t:60,f:.78},{t:65,f:.71},{t:70,f:.64},{t:75,f:.55},{t:80,f:.45}]};
-
-            const k2_agrup=[{n:1,f:1},{n:2,f:.8},{n:3,f:.7},{n:4,f:.65},{n:5,f:.6},{n:6,f:.57},{n:7,f:.54},{n:8,f:.52},{n:9,f:.5}];
-
-            const annexContent={"tab-formulas":`<h4 class="text-lg font-semibold mb-4">Fórmulas de Cálculo Principales</h4><div class="space-y-6"><div><h5 class="font-semibold text-md">1. Corriente de Carga (I<sub>carga</sub>)</h5><p class="text-sm text-gray-600 mt-1">Para circuitos trifásicos:</p><code class="block bg-gray-100 p-2 rounded-md mt-1">I_carga = P / (√3 * U * cos φ)</code><p class="text-sm text-gray-600 mt-2">Para circuitos monofásicos:</p><code class="block bg-gray-100 p-2 rounded-md mt-1">I_carga = P / (U * cos φ)</code></div><div><h5 class="font-semibold text-md">2. Caída de Tensión Porcentual (ΔU%)</h5><p class="text-sm text-gray-600 mt-1">La caída de tensión se calcula como:</p><code class="block bg-gray-100 p-2 rounded-md mt-1">ΔU = K * L * I_carga * (R * cos φ + X * sen φ)</code><p class="text-sm text-gray-600 mt-2">Donde K=2 para monofásico y K=√3 para trifásico. L en [km], R y X en [Ω/km]. Luego, el porcentaje es:</p><code class="block bg-gray-100 p-2 rounded-md mt-1">ΔU% = (ΔU / U) * 100</code></div><div><h5 class="font-semibold text-md">3. Corriente Admisible de Cortocircuito (I<sub>adm cc</sub>)</h5><p class="text-sm text-gray-600 mt-1">Calcula la Icc que el cable soporta térmicamente.</p><code class="block bg-gray-100 p-2 rounded-md mt-1">I_adm_cc = (k * S) / √t</code><p class="text-sm text-gray-600 mt-2">'k' es una constante del material, 'S' es la sección en [mm²], y 't' es el tiempo de la protección en [s].</p></div></div>`,"tab-k1":`<h4 class="text-lg font-semibold mb-4">Factor de Corrección por Temperatura (k1)</h4><p class="text-sm text-gray-600 mb-4">Ajusta la corriente admisible según la temperatura ambiente (Ref: 40°C en aire).</p><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><h5 class="font-semibold mb-2">Aislación PVC (70°C)</h5><table class="w-full text-sm text-left"><thead class="bg-gray-100"><tr><th class="p-2">Temp (°C)</th><th class="p-2">Factor (k1)</th></tr></thead><tbody>${k1_temp.PVC.map(row=>`<tr><td class="border p-2">${row.t}</td><td class="border p-2">${row.f}</td></tr>`).join('')}</tbody></table></div><div><h5 class="font-semibold mb-2">Aislación XLPE (90°C)</h5><table class="w-full text-sm text-left"><thead class="bg-gray-100"><tr><th class="p-2">Temp (°C)</th><th class="p-2">Factor (k1)</th></tr></thead><tbody>${k1_temp.XLPE.map(row=>`<tr><td class="border p-2">${row.t}</td><td class="border p-2">${row.f}</td></tr>`).join('')}</tbody></table></div></div>`,"tab-k2":`<h4 class="text-lg font-semibold mb-4">Factor de Corrección por Agrupamiento (k2)</h4><p class="text-sm text-gray-600 mb-4">Para cables en contacto, según la cantidad de circuitos.</p><table class="w-full md:w-1/2 text-sm text-left"><thead class="bg-gray-100"><tr><th class="p-2">Nº Circuitos</th><th class="p-2">Factor (k2)</th></tr></thead><tbody>${k2_agrup.map(row=>`<tr><td class="border p-2">${row.n}</td><td class="border p-2">${row.f.toFixed(2)}</td></tr>`).join('')}</tbody></table>`,"tab-kicc":`<h4 class="text-lg font-semibold mb-4">Constante 'k' para Cálculo de Icc</h4><p class="text-sm text-gray-600 mb-4">Depende del material del conductor y su aislación.</p><table class="w-full md:w-1/2 text-sm text-left"><thead class="bg-gray-100"><tr><th class="p-2">Material / Aislación</th><th class="p-2">Valor de 'k'</th></tr></thead><tbody><tr><td class="border p-2">Cobre / XLPE</td><td class="border p-2">143</td></tr><tr><td class="border p-2">Cobre / PVC</td><td class="border p-2">115</td></tr><tr><td class="border p-2">Aluminio / XLPE</td><td class="border p-2">94</td></tr><tr><td class="border p-2">Aluminio / PVC</td><td class="border p-2">76</td></tr></tbody></table>`,};
-
-            
-
-            let circuits = [];
-
-            let calculationLog = [];
-
-
-
-            const addCircuitBtn = document.getElementById('add-circuit');
-
-            const clearListBtn = document.getElementById('clear-list');
-
-            const exportCsvBtn = document.getElementById('export-csv');
-
-            const listaCircuitosEl = document.getElementById('lista-circuitos');
-
-            const emptyListMsg = document.getElementById('empty-list-message');
-
-            const tabContainer = document.getElementById('tab-container-cables');
-
-            const tabContent = document.getElementById('tab-content-cables');
-
-            const manualAnalysisSection = document.getElementById('manual-analysis-section');
-
-            const probarSeccionBtn = document.getElementById('probar-seccion-btn');
-
-            
-
-            addCircuitBtn.addEventListener('click', handleAddCircuit);
-
-            clearListBtn.addEventListener('click', handleClearList);
-
-            exportCsvBtn.addEventListener('click', handleExportCsv);
-
-            document.getElementById('tipoCable').addEventListener('change', updateTendidoOptions);
-
-            document.getElementById('tension').addEventListener('change', updateCaidaTension);
-
-            tabContainer.addEventListener('click', handleTabClick);
-
-            probarSeccionBtn.addEventListener('click', handleProbeSection);
-
-
-
-
-
-            function handleAddCircuit() {
-
-                const resultDiv = document.getElementById('resultado-cable');
-
-                resultDiv.innerHTML = `<div class="flex justify-center items-center p-4"><div class="loader"></div></div>`;
-
-                resultDiv.style.display = 'block';
-
-                manualAnalysisSection.style.display = 'none';
-
-                document.getElementById('resultado-manual').innerHTML = '';
-
-
-
-
-
-                setTimeout(() => {
-
-                    const result = selectCircuit();
-
-                    
-
-                    calculationLog.push({type: 'log-header', msg: `--- INICIO CÁLCULO: ${result.userInput.nombre} ---`});
-
-                    calculationLog.push(...(result.log || []));
-
-                    
-
-                    if (result.error) {
-
-                        resultDiv.innerHTML = `<div class="p-4"><div class="text-red-600 bg-red-100 p-4 rounded-lg text-center font-semibold">${result.error}</div></div>`;
-
-                    } else {
-
-                        circuits.push(result);
-
-                        displayImmediateResult(result, resultDiv);
-
-                        renderCircuitList();
-
-                        setupManualAnalysis(result.userInput, result.seccion);
-
-                    }
-
-                    updateLogTab();
-
-                }, 500);
-
-            }
-
-
-
-            function handleProbeSection() {
-
-                const resultDiv = document.getElementById('resultado-manual');
-
-                const S = parseFloat(document.getElementById('seccion-manual-select').value);
-
-                if(isNaN(S)) return;
-
-
-
-                const userInput = getUserInput();
-
-                const result = calculateSpecificSection(userInput, S);
-
-                
-
-                calculationLog.push(...result.log);
-
-                updateLogTab();
-
-
-
-                displayManualResult(result, resultDiv);
-
-            }
-
-            
-
-            function handleRemoveCircuit(index) {
-
-                circuits.splice(index, 1);
-
-                renderCircuitList();
-
-            }
-
-
-
-            function handleClearList() {
-
-                circuits = [];
-
-                calculationLog = [];
-
-                renderCircuitList();
-
-                updateLogTab();
-
-            }
-
-            
-
-            function handleExportCsv() {
-
-                if (circuits.length === 0) return;
-
-                
-
-                const headers = ['Nombre Circuito','Potencia (kW)','Tension (V)','FP','Longitud (m)','Tipo Cable','Tendido', 'Icc Proyecto (kA)', 'T Proteccion (s)', 'Seccion (mm²)','I Carga (A)','I Adm (A)', 'Icc Adm Cable (kA)', 'Caida U (%)'];
-
-                
-
-                const rows = circuits.map(c => {
-
-                    const nombre = `"${(c.userInput.nombre || '').replace(/"/g, '""')}"`;
-
-                    return [
-
-                        nombre,
-
-                        c.userInput.P_kW,
-
-                        c.userInput.U,
-
-                        c.userInput.cosphi,
-
-                        c.userInput.L_m,
-
-                        c.userInput.cableKey,
-
-                        c.userInput.tendidoKey, 
-
-                        (c.userInput.icc_kA || 0).toFixed(2), 
-
-                        c.userInput.tiempo_s, 
-
-                        c.seccion, 
-
-                        (c.i_carga || 0).toFixed(2),
-
-                        (c.i_adm || 0).toFixed(2), 
-
-                        (c.i_adm_cc || 0).toFixed(2), 
-
-                        (c.deltaU_perc || 0).toFixed(2)
-
-                    ].join(',');
-
-                });
-
-
-
-                const csvContent = [headers.join(','), ...rows].join('\n');
-
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-                const link = document.createElement("a");
-
-                
-
-                const url = URL.createObjectURL(blob);
-
-                link.setAttribute("href", url);
-
-                link.setAttribute("download", "calculo_circuitos.csv");
-
-                link.style.visibility = 'hidden';
-
-                document.body.appendChild(link);
-
-                link.click();
-
-                document.body.removeChild(link);
-
-            }
-
-
-
-            function renderCircuitList() {
-
-                listaCircuitosEl.innerHTML = '';
-
-                emptyListMsg.style.display = circuits.length === 0 ? 'block' : 'none';
-
-                exportCsvBtn.disabled = circuits.length === 0;
-
-                circuits.forEach((circuit, index) => {
-
-                    const template = document.getElementById('circuit-card-template');
-
-                    const card = template.content.cloneNode(true).firstElementChild;
-
-                    const { userInput, i_carga, i_adm, deltaU_perc, seccion } = circuit;
-
-                    card.querySelector('h4').textContent = userInput.nombre;
-
-                    card.querySelector('p').textContent = `${userInput.cableKey} - ${userInput.L_m}m`;
-
-                    card.querySelector('.data-seccion').textContent = `${seccion} mm²`;
-
-                    card.querySelector('.data-icarga').textContent = `${i_carga.toFixed(2)} A`;
-
-                    card.querySelector('.data-iadm').textContent = `${i_adm.toFixed(2)} A`;
-
-                    card.querySelector('.data-delta-u').textContent = `${deltaU_perc.toFixed(2)}%`;
-
-                    card.style.borderColor = '#22c55e';
-
-                    card.querySelector('.remove-card').addEventListener('click', () => handleRemoveCircuit(index));
-
-                    listaCircuitosEl.appendChild(card);
-
-                });
-
-            }
-
-            
-
-            function displayImmediateResult(result, container) {
-
-                const checkOK = `<svg class="w-5 h-5 ok-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-
-                const contentHTML = `
-
-                    <div class="p-4">
-
-                        <h3 class="text-lg font-semibold mb-2 text-gray-800 border-t pt-4">Resultado del Cálculo Automático</h3>
-
-                        <div class="bg-blue-50 p-4 rounded-lg">
-
-                            <div class="result-line"><span>1. Verificación Icc</span><div class="flex items-center gap-2"><strong>${result.i_adm_cc.toFixed(2)} kA ≥ ${result.userInput.icc_kA.toFixed(2)} kA</strong>${checkOK}</div></div>
-
-                            <div class="result-line"><span>2. Verificación I<sub>carga</sub></span><div class="flex items-center gap-2"><strong>${result.i_adm.toFixed(2)} A ≥ ${result.i_carga.toFixed(2)} A</strong>${checkOK}</div></div>
-
-                            <div class="result-line"><span>3. Verificación ΔU</span><div class="flex items-center gap-2"><strong>${result.deltaU_perc.toFixed(2)}% ≤ ${result.userInput.deltaU_adm_perc}%</strong>${checkOK}</div></div>
-
-                            <div class="p-2 mt-2 bg-blue-100 rounded-lg text-center">
-
-                                <span class="text-sm text-blue-900">Sección Mínima Requerida</span>
-
-                                <p class="font-bold text-2xl text-blue-900">${result.seccion} mm²</p>
-
-                            </div>
-
-                        </div>
-
-                    </div>`;
-
-                container.innerHTML = contentHTML;
-
-            }
-
-
-
-            function displayManualResult(result, container) {
-
-                 const { S, checks, values } = result;
-
-                 const ok = `<svg class="w-5 h-5 ok-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-
-                 const fail = `<svg class="w-5 h-5 fail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
-
-
-
-                 const contentHTML = `
-
-                     <div class="bg-gray-50 p-4 rounded-lg">
-
-                          <div class="result-line ${checks.icc ? 'text-green-700' : 'text-red-600'}"><span>1. Verificación Icc</span><div class="flex items-center gap-2"><strong>${values.i_adm_cc.toFixed(2)} kA ${checks.icc ? '≥' : '<'} ${values.icc_kA.toFixed(2)} kA</strong>${checks.icc ? ok : fail}</div></div>
-
-                          <div class="result-line ${checks.icarga ? 'text-green-700' : 'text-red-600'}"><span>2. Verificación I<sub>carga</sub></span><div class="flex items-center gap-2"><strong>${values.i_adm.toFixed(2)} A ${checks.icarga ? '≥' : '<'} ${values.i_carga.toFixed(2)} A</strong>${checks.icarga ? ok : fail}</div></div>
-
-                          <div class="result-line ${checks.deltaU ? 'text-green-700' : 'text-red-600'}"><span>3. Verificación ΔU</span><div class="flex items-center gap-2"><strong>${values.deltaU_perc.toFixed(2)}% ${checks.deltaU ? '≤' : '>'} ${values.deltaU_adm_perc}%</strong>${checks.deltaU ? ok : fail}</div></div>
-
-                     </div>`;
-
-                container.innerHTML = contentHTML;
-
-            }
-
-            
-
-            function setupManualAnalysis(userInput, idealSection) {
-
-                manualAnalysisSection.style.display = 'block';
-
-                const selectEl = document.getElementById('seccion-manual-select');
-
-                selectEl.innerHTML = '';
-
-                
-
-                const data = cableData[userInput.cableKey];
-
-                const tipoCircuito = userInput.U >= 380 ? 'tri' : 'mono';
-
-                const seccionesDisponibles = data.corrientes[userInput.tendidoKey][tipoCircuito];
-
-                
-
-                seccionesDisponibles.forEach(sec => {
-
-                    const option = document.createElement('option');
-
-                    option.value = sec.s;
-
-                    option.textContent = `${sec.s} mm²`;
-
-                    if(sec.s === idealSection) {
-
-                        option.selected = true;
-
-                    }
-
-                    selectEl.appendChild(option);
-
-                });
-
-            }
-
-            
-
-            function getUserInput(){
-
-                return {
-
-                    P_kW: parseFloat(document.getElementById('potencia').value), U: parseFloat(document.getElementById('tension').value), cosphi: parseFloat(document.getElementById('cosphi').value),
-
-                    L_m: parseFloat(document.getElementById('longitud').value), cableKey: document.getElementById('tipoCable').value, tendidoKey: document.getElementById('tipoTendido').value,
-
-                    temp: parseInt(document.getElementById('temperatura').value), numCircuitos: parseInt(document.getElementById('agrupamiento').value), deltaU_adm_perc: parseFloat(document.getElementById('caidaTensionAdm').value),
-
-                    icc_kA: parseFloat(document.getElementById('icc').value), tiempo_s: parseFloat(document.getElementById('tiempoActuacion').value),
-
-                    nombre: document.getElementById('nombreCircuito').value || `Circuito #${circuits.length + 1}`
-
-                };
-
-            }
-
-
-
-            function selectCircuit() {
-
-                const userInput = getUserInput();
-
-                return calculateCable(userInput, true);
-
-            }
-
-            
-
-            function calculateSpecificSection(userInput, S) {
-
-                return calculateCable(userInput, false, S);
-
-            }
-
-
-
-            function calculateCable(userInput, findIdeal, specificS = null) {
-
-                let log = [];
-
-                if(!findIdeal) {
-
-                     log.push({type: 'log-manual', msg: `--- Prueba Manual para sección <b>${specificS} mm²</b> ---`});
-
-                }
-
-
-
-                if (Object.values(userInput).some(v => v === null || isNaN(v) && typeof v !== 'string')) {
-
-                     return { error: 'Por favor, complete todos los campos numéricos requeridos.' };
-
-                }
-
-                if (userInput.cosphi < 0 || userInput.cosphi > 1) {
-
-                    return { error: 'El Factor de Potencia debe estar entre 0 y 1.' };
-
-                }
-
-                
-
-                const { P_kW, U, cosphi, L_m, cableKey, tendidoKey, temp, numCircuitos, deltaU_adm_perc, icc_kA, tiempo_s } = userInput;
-
-                const P_W = P_kW * 1000; const L_km = L_m / 1000; const tipoCircuito = U >= 380 ? 'tri' : 'mono';
-
-                const data = cableData[cableKey];
-
-
-
-                if (!data || !data.corrientes[tendidoKey]) {
-
-                    const errorMsg = `No hay datos para la combinación (${cableKey} / ${tendidoKey}).`;
-
-                    log.push({type: 'fail', msg: errorMsg});
-
-                    return { error: errorMsg, log: log };
-
-                }
-
-                
-
-                const i_carga = tipoCircuito === 'tri' ? (P_W / (Math.sqrt(3) * U * cosphi)) : (P_W / (U * cosphi));
-
-                if(findIdeal) log.push({type: 'step', msg: `Corriente de carga calculada (I<sub>carga</sub>): <b>${i_carga.toFixed(2)} A</b>`});
-
-
-
-                const k1 = getK1(data.aislacion, temp); 
-
-                const k2 = getK2(numCircuitos); 
-
-                const k_total = k1 * k2;
-
-                if(findIdeal) log.push({type: 'step', msg: `Factores de corrección: k1=${k1}, k2=${k2}. Total: <b>${k_total.toFixed(2)}</b>`});
-
-
-
-                const k_icc = data.k_icc;
-
-                const seccionesDisponibles = data.corrientes[tendidoKey][tipoCircuito];
-
-                if(findIdeal) log.push({type: 'step', msg: 'Iniciando búsqueda de sección...'});
-
-
-
-                const sectionsToTest = findIdeal ? seccionesDisponibles : [{s: specificS, i: (seccionesDisponibles.find(sec => sec.s === specificS) || {}).i}];
-
-
-
-                for (const seccionInfo of sectionsToTest) {
-
-                    const S = seccionInfo.s;
-
-                    if(!seccionInfo.i) {
-
-                         const errorMsg = `No se encontraron datos de corriente para la sección ${S} mm².`;
-
-                         log.push({type: 'fail', msg: errorMsg});
-
-                         return { error: errorMsg, log: log };
-
-                    }
-
-
-
-                    if(findIdeal) log.push({type: 'step', msg: `--- Verificando sección <b>${S} mm²</b> ---`});
-
-                    
-
-                    const i_adm_cc = (k_icc * S) / Math.sqrt(tiempo_s) / 1000;
-
-                    const checkIcc = i_adm_cc >= icc_kA;
-
-                    if(findIdeal && !checkIcc) { log.push({type: 'fail', msg: `<b>Falla Icc:</b> Iadm_cc (${i_adm_cc.toFixed(2)} kA) < Icc_proyecto (${icc_kA.toFixed(2)} kA).`}); continue; }
-
-                    if(findIdeal) log.push({type: 'pass', msg: `<b>Pasa Icc:</b> Iadm_cc (${i_adm_cc.toFixed(2)} kA) ≥ Icc_proyecto (${icc_kA.toFixed(2)} kA).`});
-
-
-
-                    const i_adm = seccionInfo.i * k_total;
-
-                    const checkIcarga = i_adm >= i_carga;
-
-                    if(findIdeal && !checkIcarga) { log.push({type: 'fail', msg: `<b>Falla I<sub>carga</sub>:</b> Iadm (${i_adm.toFixed(2)} A) < I<sub>carga</sub> (${i_carga.toFixed(2)} A).`}); continue; }
-
-                    if(findIdeal) log.push({type: 'pass', msg: `<b>Pasa I<sub>carga</sub>:</b> Iadm (${i_adm.toFixed(2)} A) ≥ I<sub>carga</sub> (${i_carga.toFixed(2)} A).`});
-
-                    
-
-                    const params = data.resistencias.find(r => r.s === S);
-
-                    if (!params) { if(findIdeal) log.push({type: 'fail', msg: `No se encontraron R, X para ${S} mm².`}); continue; };
-
-                    
-
-                    const sinphi = Math.sqrt(1 - Math.pow(cosphi, 2));
-
-                    const k_voltDrop = tipoCircuito === 'tri' ? Math.sqrt(3) : 2;
-
-                    const deltaU = k_voltDrop * L_km * i_carga * (params.r * cosphi + params.x * sinphi);
-
-                    const deltaU_perc = (deltaU / U) * 100;
-
-                    const checkDeltaU = deltaU_perc <= deltaU_adm_perc;
-
-
-
-                    if(findIdeal && !checkDeltaU) { log.push({type: 'fail', msg: `<b>Falla ΔU:</b> ΔU% (${deltaU_perc.toFixed(2)}%) > ΔU%_adm (${deltaU_adm_perc}%).`}); continue; }
-
-                    if(findIdeal) log.push({type: 'pass', msg: `<b>Pasa ΔU:</b> ΔU% (${deltaU_perc.toFixed(2)}%) ≤ ΔU%_adm (${deltaU_adm_perc}%).`});
-
-                    
-
-                    if (findIdeal) {
-
-                        log.push({type: 'final', msg: `Sección <b>${S} mm²</b> seleccionada. Cumple los 3 criterios.`});
-
-                        return { userInput, i_carga, seccion: S, i_adm, i_adm_cc, deltaU, deltaU_perc, error: null, log: log };
-
-                    } else {
-
-                        return { S, checks: {icc: checkIcc, icarga: checkIcarga, deltaU: checkDeltaU}, values: { i_adm_cc, icc_kA, i_adm, i_carga, deltaU_perc, deltaU_adm_perc }, log };
-
-                    }
-
-                }
-
-
-
-                const errorMsg = 'No se encontró sección que cumpla los tres criterios (Icc, Icarga y ΔU). Revise los parámetros.';
-
-                log.push({type: 'fail', msg: `<b>ERROR:</b> ${errorMsg}`});
-
-                return { error: errorMsg, log: log };
-
-            }
-
-            
-
-            function getK1(aislacion, temp) {
-
-                const factors = k1_temp[aislacion];
-
-                if (!factors) return 1;
-
-                let closest = factors.reduce((prev, curr) => (Math.abs(curr.t - temp) < Math.abs(prev.t - temp) ? curr : prev));
-
-                return closest.f;
-
-            }
-
-
-
-            function getK2(numCircuitos) {
-
-                if (numCircuitos > 9) return 0.50;
-
-                const factor = k2_agrup.find(f => f.n === numCircuitos);
-
-                return factor ? factor.f : 1;
-
-            }
-
-
-
-            function updateTendidoOptions() {
-
-                const tipoTendidoSelect = document.getElementById('tipoTendido');
-
-                tipoTendidoSelect.disabled = this.value.includes('IRAM 247');
-
-                if (tipoTendidoSelect.disabled) {
-
-                    tipoTendidoSelect.innerHTML = '<option value="B1">B1 (Cañería)</option>';
-
-                } else {
-
-                    tipoTendidoSelect.innerHTML = `<option value="B1">B1/B2 (Cañería)</option><option value="C" selected>C (Bandeja no perf.)</option><option value="E">E (Bandeja perf.)</option><option value="F">F (Trébol en bandeja)</option>`;
-
-                }
-
-            }
-
-            
-
-            function updateCaidaTension() {
-
-                document.getElementById('caidaTensionAdm').value = this.value === '220' ? '3' : '5';
-
-            }
-
-
-
-            function handleTabClick(e) {
-
-                if (e.target.classList.contains('tab-button-cables')) {
-
-                    const tabId = e.target.dataset.tab;
-
-                    document.querySelectorAll('.tab-button-cables').forEach(btn => btn.classList.remove('active'));
-
-                    e.target.classList.add('active');
-
-                    
-
-                    if(tabId === 'tab-log'){
-
-                        updateLogTab();
-
-                    } else {
-
-                        tabContent.innerHTML = annexContent[tabId] || '';
-
-                    }
-
-                }
-
-            }
-
-            
-
-            function updateLogTab(){
-
-                 if(calculationLog.length === 0){
-
-                    tabContent.innerHTML = `<p class="text-gray-500 text-center">Realice un cálculo para ver la memoria detallada aquí.</p>`;
-
-                } else {
-
-                    let logHTML = calculationLog.map(entry => {
-
-                        return `<div class="log-entry ${entry.type}">${entry.msg}</div>`;
-
-                    }).join('');
-
-                    tabContent.innerHTML = logHTML;
-
-                }
-
-            }
-
-
-
-            renderCircuitList();
-
-            updateTendidoOptions.call(document.getElementById('tipoCable'));
-
-            handleTabClick({ target: document.querySelector('.tab-button-cables.active') });
-
-        })();
-
-
-
+    <header>
+        <h1>Calculadoras Técnicas Eléctricas</h1>
+        <p>Herramienta unificada para cálculos de Cables, Puesta a Tierra y Cortocircuito.</p>
+    </header>
+
+    <nav>
+        <a href="#" id="nav-inicio" class="active">Inicio</a>
+        <a href="#" id="nav-cables">Cálculo de Cables</a>
+        <a href="#" id="nav-tierra">Puesta a Tierra</a>
+        <a href="#" id="nav-cortocircuito">Cortocircuito</a>
+        <a href="#" id="nav-creditos">Créditos</a>
+    </nav>
+
+    <main>
+        <!-- SECCIÓN DE INICIO -->
+        <section id="seccion-inicio">
+            <h2>Bienvenido a la Suite de Cálculo Eléctrico</h2>
+            <p>Este proyecto unifica tres herramientas esenciales para el cálculo eléctrico profesional, basadas en la reglamentación argentina (AEA) y normas IRAM.</p>
+            <p>Navega a través de las diferentes calculadoras utilizando el menú superior. Cada herramienta está diseñada para ser intuitiva y proporcionar resultados detallados para tus proyectos.</p>
+            <div class="avalado-por">
+                <p><strong>Avalado por:</strong> [Nombre de la Institución, Empresa o Profesional]</p>
+            </div>
+        </section>
+
+        <!-- ====================================================================== -->
+        <!-- CALCULADORA DE SELECCIÓN DE CABLES -->
+        <!-- ====================================================================== -->
+        <section id="seccion-cables" class="hidden">
+            <div class="container mx-auto">
+                <header class="text-center mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Calculadora Eléctrica Avanzada</h1>
+                    <p class="text-md text-gray-600 mt-2">Basada en Normas IRAM y Reglamentación AEA 90364</p>
+                </header>
+        
+                <!-- CALCULADORA DE CIRCUITOS -->
+                <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+                    <h2 class="text-2xl font-bold mb-2 text-blue-700">1. Calculadora de Circuitos</h2>
+                    <p class="text-sm text-gray-500 mb-6">Complete todos los datos para realizar un cálculo integral (Icc, Icarga y ΔU) y añadir el circuito a la lista.</p>
+        
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <!-- Columna 1 -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Datos de la Carga</h3>
+                            <div class="space-y-4">
+                                <div><label for="potencia" class="block text-sm font-medium">Potencia (kW)</label><input type="number" id="potencia" value="5" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                                <div><label for="tension" class="block text-sm font-medium">Tensión (V)</label><select id="tension" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="220">220V</option><option value="380" selected>380V</option></select></div>
+                                <div><label for="cosphi" class="block text-sm font-medium">cos φ</label><input type="number" id="cosphi" value="0.9" step="0.01" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                            </div>
+                        </div>
+                        <!-- Columna 2 -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Instalación</h3>
+                            <div class="space-y-4">
+                                <div><label for="longitud" class="block text-sm font-medium">Longitud (m)</label><input type="number" id="longitud" value="50" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                                <div><label for="tipoCable" class="block text-sm font-medium">Cable</label><select id="tipoCable" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="IRAM 2178-XLPE-Cu" selected>IRAM 2178 (XLPE/Cu)</option><option value="IRAM 2178-PVC-Cu">IRAM 2178 (PVC/Cu)</option><option value="IRAM 247-PVC-Cu">IRAM 247-3 (PVC/Cu)</option><option value="IRAM 2178-XLPE-Al">IRAM 2178 (XLPE/Al)</option><option value="IRAM 2178-PVC-Al">IRAM 2178 (PVC/Al)</option></select></div>
+                                <div><label for="tipoTendido" class="block text-sm font-medium">Tendido</label><select id="tipoTendido" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="B1">B1/B2 (Cañería)</option><option value="C" selected>C (Bandeja no perf.)</option><option value="E">E (Bandeja perf.)</option><option value="F">F (Trébol en bandeja)</option></select></div>
+                            </div>
+                        </div>
+                        <!-- Columna 3 -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Factores y Falla</h3>
+                                <div class="space-y-4">
+                                    <div><label for="temperatura" class="block text-sm font-medium">Temp. (°C)</label><input type="number" id="temperatura" value="40" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                                    <div><label for="agrupamiento" class="block text-sm font-medium">Agrup.</label><input type="number" id="agrupamiento" value="1" min="1" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                                    <div><label for="icc" class="block text-sm font-medium">Icc a Soportar (kA)</label><input type="number" id="icc" value="10" step="0.1" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                                </div>
+                        </div>
+                        <!-- Columna 4 -->
+                            <div>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 text-gray-700">Proyecto</h3>
+                            <div class="space-y-4">
+                                <div><label for="tiempoActuacion" class="block text-sm font-medium">T. Prot. (s)</label><input type="number" id="tiempoActuacion" value="0.1" step="0.01" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                                <div><label for="caidaTensionAdm" class="block text-sm font-medium">ΔU Adm (%)</label><select id="caidaTensionAdm" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"><option value="3">3%</option><option value="5" selected>5%</option><option value="15">15%</option></select></div>
+                                <div><label for="nombreCircuito" class="block text-sm font-medium">Nombre</label><input type="text" id="nombreCircuito" placeholder="Ej: Bomba Piscina" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2 px-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-4 border-t pt-4">
+                        <button id="add-circuit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700">Calcular y Añadir</button>
+                    </div>
+                        <div id="resultado-cable" class="mt-6 hidden"></div>
+                        <!-- Nueva sección de análisis manual -->
+                        <div id="manual-analysis-section" class="mt-6 hidden">
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 border-t pt-4">Análisis Manual de Secciones</h3>
+                                <div class="flex items-end gap-4">
+                                    <div class="flex-grow">
+                                        <label for="seccion-manual-select" class="block text-sm font-medium">Seleccione una sección para probar</label>
+                                        <select id="seccion-manual-select" class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm py-2
+                                px-3"></select>
+                                    </div>
+                                    <button id="probar-seccion-btn" class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700">Probar Sección</button>
+                                </div>
+                                <div id="resultado-manual" class="mt-4"></div>
+                        </div>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+                        <h2 class="text-2xl font-bold text-gray-800">2. Lista de Circuitos del Proyecto</h2>
+                        <div class="flex gap-2">
+                            <button id="export-csv" class="px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">Exportar a CSV</button>
+                            <button id="clear-list" class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-700">Limpiar Lista</button>
+                        </div>
+                    </div>
+                    <div id="lista-circuitos" class="space-y-4">
+                            <p id="empty-list-message" class="text-center text-gray-500 py-8 bg-white rounded-xl shadow-sm">Aún no se han añadido circuitos.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">3. Anexos y Tablas de Referencia</h2>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="border-b border-gray-200">
+                            <nav class="-mb-px flex space-x-6 overflow-x-auto" id="tab-container-cables">
+                                <button data-tab="tab-formulas" class="tab-button-cables active py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Fórmulas</button>
+                                <button data-tab="tab-log" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Memoria de Cálculo</button>
+                                <button data-tab="tab-k1" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Tabla k1</button>
+                                <button data-tab="tab-k2" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Tabla k2</button>
+                                <button data-tab="tab-kicc" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-500 whitespace-nowrap">Tabla k (Icc)</button>
+                            </nav>
+                        </div>
+                        <div id="tab-content-cables" class="pt-6"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <template id="circuit-card-template">
+                <div class="bg-white p-4 rounded-lg shadow-md border-l-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-lg text-gray-800"></h4>
+                            <p class="text-sm text-gray-500"></p>
+                        </div>
+                        <button class="remove-card text-gray-400 hover:text-red-500 text-2xl leading-none">&times;</button>
+                    </div>
+                    <div class="mt-2 pt-2 border-t text-sm grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <div><span class="font-semibold">Sección:</span> <span class="data-seccion"></span></div>
+                        <div><span class="font-semibold">I<sub>carga</sub>:</span> <span class="data-icarga"></span></div>
+                        <div><span class="font-semibold">I<sub>adm</sub>:</span> <span class="data-iadm"></span></div>
+                        <div><span class="font-semibold">ΔU:</span> <span class="data-delta-u"></span></div>
+                    </div>
+                </div>
+            </template>
+        </section>
 
         <!-- ====================================================================== -->
         <!-- CALCULADORA DE PUESTA A TIERRA -->
