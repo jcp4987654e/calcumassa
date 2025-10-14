@@ -94,6 +94,8 @@
         .anexo-box { background-color: color-mix(in srgb, var(--primary-color) 10%, var(--body-bg)); border-top: 3px solid var(--primary-color); padding: 2rem; margin-top: 3rem; border-radius: 0.75rem; }
         .ok-icon { color: var(--success-text); }
         .fail-icon { color: var(--error-text); }
+        .input-error { border-color: var(--error-text) !important; box-shadow: 0 0 0 2px color-mix(in srgb, var(--error-text) 40%, transparent) !important; }
+
 
         /* --- ESTILOS CALCULADORA DE CABLES --- */
         #seccion-cables .tab-button-cables.active { border-bottom-color: var(--primary-color); color: var(--primary-color); font-weight: 600; }
@@ -106,7 +108,7 @@
         #seccion-tierra .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
         #seccion-tierra .tab-button.active { border-color: var(--primary-color); color: var(--primary-color); background-color: transparent; border-bottom-width: 2px; }
         #seccion-tierra .info-card { background-color: color-mix(in srgb, var(--primary-color) 10%, var(--body-bg)); border-left: 4px solid var(--primary-color); }
-        #seccion-tierra #initial-message { border-style: dashed; border-color: #D1D5DB; }
+        #seccion-tierra #initial-message { border-style: dashed; border-color: var(--border-color); }
 
         /* --- ESTILOS CALCULADORA DE CORTOCIRCUITO --- */
         #seccion-cortocircuito table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.9rem; background-color: var(--card-bg); }
@@ -157,16 +159,16 @@
         <!-- SECCIÓN DE INICIO -->
         <section id="seccion-inicio">
             <h2 class="text-3xl font-bold mb-4">Bienvenido a la Suite de Cálculo Eléctrico</h2>
-            <p class="text-lg text-gray-600">Este proyecto unifica tres herramientas esenciales para el cálculo eléctrico profesional, basadas en la reglamentación argentina (AEA) y normas IRAM.</p>
-            <p class="mt-2 text-gray-600">Navega a través de las diferentes calculadoras utilizando el menú superior. Cada herramienta está diseñada para ser intuitiva y proporcionar resultados detallados para tus proyectos.</p>
+            <p class="text-lg text-text-secondary">Este proyecto unifica tres herramientas esenciales para el cálculo eléctrico profesional, basadas en la reglamentación argentina (AEA) y normas IRAM.</p>
+            <p class="mt-2 text-text-secondary">Navega a través de las diferentes calculadoras utilizando el menú superior. Cada herramienta está diseñada para ser intuitiva y proporcionar resultados detallados para tus proyectos.</p>
             
             <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
-                    <p><strong>INSTITUTO:</strong> INSTITUTO DE FORMACION TECNICA Y PROFESIONAL 13 DE JULIO [EX ENET SEGBA]</p>
+                <div class="p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-r-lg">
+                     <p class="text-text-secondary"><strong>INSTITUTO:</strong> INSTITUTO DE FORMACION TECNICA Y PROFESIONAL 13 DE JULIO [EX ENET SEGBA]</p>
                 </div>
-                <div class="p-4 bg-gray-100 border-l-4 border-gray-500 rounded-r-lg">
-                    <h3 class="font-bold text-gray-800 mb-2">Normas de Referencia</h3>
-                    <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
+                <div class="p-4 bg-gray-100 dark:bg-gray-800/30 border-l-4 border-gray-500 rounded-r-lg">
+                    <h3 class="font-bold text-text-primary mb-2">Normas de Referencia</h3>
+                    <ul class="text-sm text-text-secondary list-disc list-inside space-y-1">
                         <li><strong>AEA 90364-7-771:</strong> Instalaciones Eléctricas en Viviendas, Oficinas y Locales.</li>
                         <li><strong>AEA 90364 (General):</strong> Reglamentación para la Ejecución de Instalaciones Eléctricas en Inmuebles.</li>
                         <li><strong>IRAM 2178:</strong> Cables de energía aislados con polietileno reticulado (XLPE).</li>
@@ -182,23 +184,23 @@
         <section id="seccion-cables" class="hidden">
             <div class="container mx-auto">
                 <header class="text-center mb-8">
-                    <h1 class="text-3xl md:text-4xl font-bold">Calculadora Eléctrica Avanzada</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold">Calculadora de Dimensionamiento de Conductores</h1>
                     <p class="text-md text-text-secondary mt-2">Basada en Normas IRAM y Reglamentación AEA 90364</p>
                 </header>
                 <div class="p-6 rounded-xl shadow-lg mb-8">
                     <h2 class="text-2xl font-bold mb-2 text-primary-color">1. Calculadora de Circuitos</h2>
-                    <p class="text-sm text-text-secondary mb-6">Complete todos los datos para realizar un cálculo integral (Icc, Icarga y ΔU) y añadir el circuito a la lista.</p>
+                    <p class="text-sm text-text-secondary mb-6">Complete todos los datos para realizar un cálculo integral y añadir el circuito a la lista del proyecto.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div>
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1">Datos de la Carga</h3>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 border-border-color">Datos de la Carga</h3>
                             <div class="space-y-4">
                                 <div class="input-group"><label for="potencia">Potencia (kW)</label><input type="number" id="potencia" value="5"></div>
                                 <div class="input-group"><label for="tension">Tensión (V)</label><select id="tension"><option value="220">220V</option><option value="380" selected>380V</option></select></div>
-                                <div class="input-group"><label for="cosphi">cos φ</label><input type="number" id="cosphi" value="0.9" step="0.01"></div>
+                                <div class="input-group"><label for="cosphi">cos φ</label><input type="number" id="cosphi" value="0.9" step="0.01" min="0" max="1"></div>
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1">Instalación</h3>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 border-border-color">Instalación</h3>
                             <div class="space-y-4">
                                 <div class="input-group"><label for="longitud">Longitud (m)</label><input type="number" id="longitud" value="50"></div>
                                 <div class="input-group"><label for="tipoCable">Cable</label><select id="tipoCable"><option value="IRAM 2178-XLPE-Cu" selected>IRAM 2178 (XLPE/Cu)</option><option value="IRAM 2178-PVC-Cu">IRAM 2178 (PVC/Cu)</option><option value="IRAM 247-PVC-Cu">IRAM 247-3 (PVC/Cu)</option><option value="IRAM 2178-XLPE-Al">IRAM 2178 (XLPE/Al)</option><option value="IRAM 2178-PVC-Al">IRAM 2178 (PVC/Al)</option></select></div>
@@ -206,19 +208,19 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1">Factores y Falla</h3>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 border-border-color">Factores y Falla</h3>
                                 <div class="space-y-4">
-                                    <div class="input-group"><label for="temperatura">Temp. (°C)</label><input type="number" id="temperatura" value="40"></div>
-                                    <div class="input-group"><label for="agrupamiento">Agrup.</label><input type="number" id="agrupamiento" value="1" min="1"></div>
+                                    <div class="input-group"><label for="temperatura">Temp. Ambiente (°C)</label><input type="number" id="temperatura" value="40"></div>
+                                    <div class="input-group"><label for="agrupamiento">Nº Circuitos Agrupados</label><input type="number" id="agrupamiento" value="1" min="1"></div>
                                     <div class="input-group"><label for="icc">Icc a Soportar (kA)</label><input type="number" id="icc" value="10" step="0.1"></div>
                                 </div>
                         </div>
                             <div>
-                            <h3 class="text-lg font-semibold mb-2 border-b pb-1">Proyecto</h3>
+                            <h3 class="text-lg font-semibold mb-2 border-b pb-1 border-border-color">Proyecto</h3>
                             <div class="space-y-4">
-                                <div class="input-group"><label for="tiempoActuacion">T. Prot. (s)</label><input type="number" id="tiempoActuacion" value="0.1" step="0.01"></div>
-                                <div class="input-group"><label for="caidaTensionAdm">ΔU Adm (%)</label><select id="caidaTensionAdm"><option value="3">3%</option><option value="5" selected>5%</option><option value="15">15%</option></select></div>
-                                <div class="input-group"><label for="nombreCircuito">Nombre</label><input type="text" id="nombreCircuito" placeholder="Ej: Bomba Piscina"></div>
+                                <div class="input-group"><label for="tiempoActuacion">T. Actuación Prot. (s)</label><input type="number" id="tiempoActuacion" value="0.1" step="0.01"></div>
+                                <div class="input-group"><label for="caidaTensionAdm">ΔU Admisible (%)</label><select id="caidaTensionAdm"><option value="3">3% (Iluminación)</option><option value="5" selected>5% (Otros Usos)</option><option value="15">15% (Arranque Motores)</option></select></div>
+                                <div class="input-group"><label for="nombreCircuito">Nombre del Circuito</label><input type="text" id="nombreCircuito" placeholder="Ej: Bomba Piscina"></div>
                             </div>
                         </div>
                     </div>
@@ -230,10 +232,10 @@
                             <h3 class="text-lg font-semibold mb-2 border-t pt-4 border-border-color">Análisis Manual de Secciones</h3>
                                 <div class="flex items-end gap-4">
                                     <div class="flex-grow">
-                                        <label for="seccion-manual-select" class="block text-sm font-medium">Seleccione una sección para probar</label>
+                                        <label for="seccion-manual-select" class="block text-sm font-medium text-text-secondary">Seleccione una sección para probar</label>
                                         <select id="seccion-manual-select" class="mt-1 block w-full"></select>
                                     </div>
-                                    <button id="probar-seccion-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white">Probar Sección</button>
+                                    <button id="probar-seccion-btn" class="btn bg-gray-600 hover:bg-gray-700 text-white dark:bg-gray-500 dark:hover:bg-gray-400">Probar Sección</button>
                                 </div>
                                 <div id="resultado-manual" class="mt-4"></div>
                         </div>
@@ -259,8 +261,8 @@
                             <nav class="-mb-px flex space-x-6 overflow-x-auto" id="tab-container-cables">
                                 <button data-tab="tab-formulas" class="tab-button-cables active py-4 px-1 border-b-2 border-transparent text-text-secondary hover:text-primary-color hover:border-primary-color whitespace-nowrap">Fórmulas</button>
                                 <button data-tab="tab-log" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-text-secondary hover:text-primary-color hover:border-primary-color whitespace-nowrap">Memoria de Cálculo</button>
-                                <button data-tab="tab-k1" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-text-secondary hover:text-primary-color hover:border-primary-color whitespace-nowrap">Tabla k1</button>
-                                <button data-tab="tab-k2" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-text-secondary hover:text-primary-color hover:border-primary-color whitespace-nowrap">Tabla k2</button>
+                                <button data-tab="tab-k1" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-text-secondary hover:text-primary-color hover:border-primary-color whitespace-nowrap">Tabla k1 (Temperatura)</button>
+                                <button data-tab="tab-k2" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-text-secondary hover:text-primary-color hover:border-primary-color whitespace-nowrap">Tabla k2 (Agrupamiento)</button>
                                 <button data-tab="tab-kicc" class="tab-button-cables py-4 px-1 border-b-2 border-transparent text-text-secondary hover:text-primary-color hover:border-primary-color whitespace-nowrap">Tabla k (Icc)</button>
                             </nav>
                         </div>
@@ -456,7 +458,7 @@
                     <!-- Columna de Resultados -->
                     <div class="md:col-span-8">
                         <div id="results-container" class="p-6 rounded-xl shadow-lg min-h-full" style="display: none;"></div>
-                        <div id="initial-message" class="flex items-center justify-center p-6 rounded-xl border-2 border-dashed min-h-full">
+                        <div id="initial-message" class="flex items-center justify-center p-6 rounded-xl border-2 min-h-full">
                             <div class="text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 <h3 class="mt-2 text-lg font-medium text-text-primary">Listo para Planificar</h3>
@@ -516,7 +518,7 @@
                             <div id="diagramCard" class="p-6 rounded-xl shadow-md">
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">Diagrama Unifilar</h3>
-                                    <button id="fullscreenDiagramBtn" class="btn btn-sm bg-gray-200 hover:bg-gray-300 text-gray-700" title="Ver en Pantalla Completa">
+                                    <button id="fullscreenDiagramBtn" class="btn btn-sm bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500" title="Ver en Pantalla Completa">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5" /></svg>
                                     </button>
                                 </div>
@@ -539,21 +541,23 @@
                 </div>
         
                 <div id="anexo" class="anexo-box">
-                    <h3>Anexo Técnico</h3>
-                    <div>
-                        <h4>Fundamentos Normativos (IRAM / AEA)</h4>
-                        <p>El cálculo de corrientes de cortocircuito es un requisito fundamental de la <strong>Reglamentación para la Ejecución de Instalaciones Eléctricas en Inmuebles AEA 90364</strong>. El objetivo es asegurar que todos los componentes de la instalación (cables, interruptores, tableros) puedan soportar los esfuerzos térmicos y dinámicos producidos por una falla. Esta calculadora aplica el <strong>método de las impedancias</strong>, que consiste en sumar todas las impedancias (Red, transformadores, cables) desde la fuente hasta el punto de falla para determinar la corriente de cortocircuito máxima (Icc). La verificación del cable se realiza según la fórmula de solicitación térmica adiabática (I²t), especificada en la norma <strong>IRAM 2178</strong>, asegurando que la energía que el cable puede soportar ($K^2S^2$) sea mayor a la energía que deja pasar la protección ($I_{cc}^2t$).</p>
-                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Anexo Técnico</h3>
+                    <div class="space-y-6">
                         <div>
-                        <h4>Aporte de Motores al Cortocircuito</h4>
-                        <p>Durante un cortocircuito, la tensión del sistema cae bruscamente. En ese instante, los motores de inducción, por su inercia y el campo magnético remanente en su rotor, dejan de consumir energía y comienzan a funcionar como generadores, aportando corriente a la falla. Este aporte es de corta duración (típicamente unos pocos ciclos) pero significativo. Según la bibliografía técnica, se estima que un motor puede aportar una corriente de entre <strong>4 a 6 veces su corriente nominal (In)</strong>. Esta calculadora utiliza un factor conservador de 5. Es crucial considerar este aporte, ya que la corriente total que debe interrumpir una protección en un tablero no es solo la que proviene de la red, sino la suma de la corriente de la red más la de todos los motores aguas abajo del punto de falla.</p>
+                            <h4 class="text-lg font-semibold mb-2">Fundamentos Normativos (IRAM / AEA)</h4>
+                            <p class="text-sm text-text-secondary">El cálculo de corrientes de cortocircuito es un requisito fundamental de la <strong>Reglamentación para la Ejecución de Instalaciones Eléctricas en Inmuebles AEA 90364</strong>. El objetivo es asegurar que todos los componentes de la instalación (cables, interruptores, tableros) puedan soportar los esfuerzos térmicos y dinámicos producidos por una falla. Esta calculadora aplica el <strong>método de las impedancias</strong>, que consiste en sumar todas las impedancias (Red, transformadores, cables) desde la fuente hasta el punto de falla para determinar la corriente de cortocircuito máxima (Icc). La verificación del cable se realiza según la fórmula de solicitación térmica adiabática (I²t), especificada en la norma <strong>IRAM 2178</strong>, asegurando que la energía que el cable puede soportar ($K^2S^2$) sea mayor a la energía que deja pasar la protección ($I_{cc}^2t$).</p>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Aporte de Motores al Cortocircuito</h4>
+                            <p class="text-sm text-text-secondary">Durante un cortocircuito, la tensión del sistema cae bruscamente. En ese instante, los motores de inducción, por su inercia y el campo magnético remanente en su rotor, dejan de consumir energía y comienzan a funcionar como generadores, aportando corriente a la falla. Este aporte es de corta duración (típicamente unos pocos ciclos) pero significativo. Según la bibliografía técnica, se estima que un motor puede aportar una corriente de entre <strong>4 a 6 veces su corriente nominal (In)</strong>. Esta calculadora utiliza un factor conservador de 5. Es crucial considerar este aporte, ya que la corriente total que debe interrumpir una protección en un tablero no es solo la que proviene de la red, sino la suma de la corriente de la red más la de todos los motores aguas abajo del punto de falla.</p>
+                        </div>
                     </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-                            <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Factor de Impulso χ (Kappa)</h4> <div class="overflow-x-auto"> <table id="kappaTable"></table> </div> </div>
-                            <div> <h4 class="text-lg font-semibold mb-2 text-indigo-700">Valores Típicos para Transformadores</h4> <div class="overflow-x-auto"> <table id="trafoTable"></table> </div> </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                        <div> <h4 class="text-lg font-semibold mb-2 text-primary-color">Factor de Impulso χ (Kappa)</h4> <div class="overflow-x-auto"> <table id="kappaTable"></table> </div> </div>
+                        <div> <h4 class="text-lg font-semibold mb-2 text-primary-color">Valores Típicos para Transformadores</h4> <div class="overflow-x-auto"> <table id="trafoTable"></table> </div> </div>
                     </div>
                     <div class="mt-8">
-                        <h4 class="text-lg font-semibold mb-2 text-indigo-700">Memoria de Cálculo (Paso a Paso)</h4>
+                        <h4 class="text-lg font-semibold mb-2 text-primary-color">Memoria de Cálculo (Paso a Paso)</h4>
                         <div id="calculationLogContainer" class="bg-card-bg p-4 rounded-lg shadow-inner max-h-96 overflow-y-auto">
                             <p class="text-text-secondary p-4 text-center">El detalle del cálculo aparecerá aquí.</p>
                         </div>
@@ -598,7 +602,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        // --- LÓGICA DE NAVEGACIÓN PRINCIPAL Y PANTALLA COMPLETA ---
+        // --- LÓGICA DE NAVEGACIÓN PRINCIPAL Y TEMAS ---
         const navLinks = document.querySelectorAll('nav a');
         const sections = document.querySelectorAll('main > section');
         const fullscreenBtn = document.getElementById('nav-fullscreen');
@@ -606,7 +610,7 @@
         const sunIcon = document.getElementById('theme-icon-sun');
         const moonIcon = document.getElementById('theme-icon-moon');
 
-        function setTeam(theme) {
+        function setTheme(theme) {
             if (theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
                 sunIcon.classList.add('hidden');
@@ -623,23 +627,20 @@
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('theme', newTheme);
-            setTeam(newTheme);
+            setTheme(newTheme);
         });
 
-        // Cargar tema guardado
         const savedTheme = localStorage.getItem('theme') || 'light';
-        setTeam(savedTheme);
+        setTheme(savedTheme);
 
 
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {
-                    alert(`Error al intentar activar el modo de pantalla completa: ${err.message} (${err.name})`);
+                    console.error(`Error al activar pantalla completa: ${err.message}`);
                 });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
             }
         }
 
@@ -713,8 +714,8 @@
             function handleAddCircuit() {
                 const resultDiv = document.getElementById('resultado-cable');
                 resultDiv.innerHTML = `<div class="flex justify-center items-center p-4"><div class="loader"></div></div>`;
-                resultDiv.style.display = 'block';
-                manualAnalysisSection.style.display = 'none';
+                resultDiv.classList.remove('hidden');
+                manualAnalysisSection.classList.add('hidden');
                 document.getElementById('resultado-manual').innerHTML = '';
 
 
@@ -788,7 +789,7 @@
                 });
 
                 const csvContent = [headers.join(','), ...rows].join('\n');
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const blob = new Blob(["\ufeff", csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a");
                 
                 const url = URL.createObjectURL(blob);
@@ -825,13 +826,13 @@
                 const contentHTML = `
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2 border-t pt-4 border-border-color">Resultado del Cálculo Automático</h3>
-                        <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                             <div class="result-line"><span>1. Verificación Icc</span><div class="flex items-center gap-2"><strong>${result.i_adm_cc.toFixed(2)} kA ≥ ${result.userInput.icc_kA.toFixed(2)} kA</strong>${checkOK}</div></div>
                             <div class="result-line"><span>2. Verificación I<sub>carga</sub></span><div class="flex items-center gap-2"><strong>${result.i_adm.toFixed(2)} A ≥ ${result.i_carga.toFixed(2)} A</strong>${checkOK}</div></div>
                             <div class="result-line"><span>3. Verificación ΔU</span><div class="flex items-center gap-2"><strong>${result.deltaU_perc.toFixed(2)}% ≤ ${result.userInput.deltaU_adm_perc}%</strong>${checkOK}</div></div>
-                            <div class="p-2 mt-2 bg-blue-100 rounded-lg text-center">
-                                <span class="text-sm text-blue-900">Sección Mínima Requerida</span>
-                                <p class="font-bold text-2xl text-blue-900">${result.seccion} mm²</p>
+                            <div class="p-2 mt-2 bg-blue-100 dark:bg-blue-800/30 rounded-lg text-center">
+                                <span class="text-sm text-blue-900 dark:text-blue-200">Sección Mínima Requerida</span>
+                                <p class="font-bold text-2xl text-blue-900 dark:text-blue-100">${result.seccion} mm²</p>
                             </div>
                         </div>
                     </div>`;
@@ -845,21 +846,21 @@
 
                     const contentHTML = `
                         <div class="bg-input-bg p-4 rounded-lg">
-                                <div class="result-line ${checks.icc ? 'text-success-text' : 'text-error-text'}"><span>1. Verificación Icc</span><div class="flex items-center gap-2"><strong>${values.i_adm_cc.toFixed(2)} kA ${checks.icc ? '≥' : '<'} ${values.icc_kA.toFixed(2)} kA</strong>${checks.icc ? ok : fail}</div></div>
-                                <div class="result-line ${checks.icarga ? 'text-success-text' : 'text-error-text'}"><span>2. Verificación I<sub>carga</sub></span><div class="flex items-center gap-2"><strong>${values.i_adm.toFixed(2)} A ${checks.icarga ? '≥' : '<'} ${values.i_carga.toFixed(2)} A</strong>${checks.icarga ? ok : fail}</div></div>
-                                <div class="result-line ${checks.deltaU ? 'text-success-text' : 'text-error-text'}"><span>3. Verificación ΔU</span><div class="flex items-center gap-2"><strong>${values.deltaU_perc.toFixed(2)}% ${checks.deltaU ? '≤' : '>'} ${values.deltaU_adm_perc}%</strong>${checks.deltaU ? ok : fail}</div></div>
+                                <div class="result-line ${checks.icc ? '' : 'text-error-text'}"><span>1. Verificación Icc</span><div class="flex items-center gap-2"><strong>${values.i_adm_cc.toFixed(2)} kA ${checks.icc ? '≥' : '<'} ${values.icc_kA.toFixed(2)} kA</strong>${checks.icc ? ok : fail}</div></div>
+                                <div class="result-line ${checks.icarga ? '' : 'text-error-text'}"><span>2. Verificación I<sub>carga</sub></span><div class="flex items-center gap-2"><strong>${values.i_adm.toFixed(2)} A ${checks.icarga ? '≥' : '<'} ${values.i_carga.toFixed(2)} A</strong>${checks.icarga ? ok : fail}</div></div>
+                                <div class="result-line ${checks.deltaU ? '' : 'text-error-text'}"><span>3. Verificación ΔU</span><div class="flex items-center gap-2"><strong>${values.deltaU_perc.toFixed(2)}% ${checks.deltaU ? '≤' : '>'} ${values.deltaU_adm_perc}%</strong>${checks.deltaU ? ok : fail}</div></div>
                         </div>`;
                 container.innerHTML = contentHTML;
             }
             
             function setupManualAnalysis(userInput, idealSection) {
-                manualAnalysisSection.style.display = 'block';
+                manualAnalysisSection.classList.remove('hidden');
                 const selectEl = document.getElementById('seccion-manual-select');
                 selectEl.innerHTML = '';
                 
                 const data = cableData[userInput.cableKey];
                 const tipoCircuito = userInput.U >= 380 ? 'tri' : 'mono';
-                const seccionesDisponibles = data.corrientes[userInput.tendidoKey][tipoCircuito];
+                const seccionesDisponibles = data.corrientes[userInput.tendidoKey]?.[tipoCircuito] || [];
                 
                 seccionesDisponibles.forEach(sec => {
                     const option = document.createElement('option');
@@ -923,7 +924,7 @@
                 if(findIdeal) log.push({type: 'step', msg: `Factores de corrección: k1=${k1}, k2=${k2}. Total: <b>${k_total.toFixed(2)}</b>`});
 
                 const k_icc = data.k_icc;
-                const seccionesDisponibles = data.corrientes[tendidoKey][tipoCircuito];
+                const seccionesDisponibles = data.corrientes[tendidoKey]?.[tipoCircuito] || [];
                 if(findIdeal) log.push({type: 'step', msg: 'Iniciando búsqueda de sección...'});
 
                 const sectionsToTest = findIdeal ? seccionesDisponibles : [{s: specificS, i: (seccionesDisponibles.find(sec => sec.s === specificS) || {}).i}];
@@ -1019,7 +1020,14 @@
                         tabContent.innerHTML = `<p class="text-text-secondary text-center">Realice un cálculo para ver la memoria detallada aquí.</p>`;
                     } else {
                         let logHTML = calculationLog.map(entry => {
-                            return `<div class="log-entry ${entry.type}">${entry.msg}</div>`;
+                            let entryClass = '';
+                            switch(entry.type) {
+                                case 'fail': entryClass = 'text-red-600 dark:text-red-400'; break;
+                                case 'pass': entryClass = 'text-green-600 dark:text-green-400'; break;
+                                case 'final': entryClass = 'font-bold text-primary-color'; break;
+                                case 'log-header': entryClass = 'font-semibold border-t border-border-color mt-2 pt-2'; break;
+                            }
+                            return `<div class="log-entry text-sm py-1 ${entryClass}">${entry.msg}</div>`;
                         }).join('');
                         tabContent.innerHTML = logHTML;
                     }
@@ -1072,7 +1080,7 @@
                     saveState_tierra();
                 });
                 dom_tierra.calcularBtn.addEventListener('click', () => {
-                    if (dom_tierra.mode_selector.value === 'proyecto' && document.querySelectorAll('.sector-card').length === 0) {
+                    if (dom_tierra.mode_selector.value === 'proyecto' && document.querySelectorAll('#sectores-container > div').length === 0) {
                         alert('Debe añadir al menos un sector de protección.'); return;
                     }
                     dom_tierra.resultsContainer.style.display = 'none';
@@ -1116,7 +1124,7 @@
                         service_d: getElement('proyecto_service_d').value,
                         service_manual_check: getElement('proyecto_service_manual_check').checked,
                         service_manual_input: getElement('proyecto_service_manual_input').value,
-                        sectores: Array.from(document.querySelectorAll('.sector-card')).map(card => ({
+                        sectores: Array.from(document.querySelectorAll('#sectores-container > div')).map(card => ({
                             id: card.id,
                             name: card.querySelector('.sector-name').value,
                             rcd: card.querySelector('.sector-rcd').value,
@@ -1271,7 +1279,7 @@
             });
 
             window.removeSector_tierra = function(sectorId) { 
-                getElement(sectorId).remove(); 
+                getElement(sectorId)?.remove(); 
                 saveState_tierra();
             }
 
@@ -1288,7 +1296,7 @@
                 };
 
                 if (mode === 'proyecto') {
-                    baseParams.sectores = Array.from(document.querySelectorAll('.sector-card')).map(card => ({
+                    baseParams.sectores = Array.from(document.querySelectorAll('#sectores-container > div')).map(card => ({
                         name: card.querySelector('.sector-name').value,
                         rcd: card.querySelector('.sector-rcd').value,
                         l: parseFloat(card.querySelector('.sector-l').value),
@@ -1418,6 +1426,20 @@
                 displayResults_tierra(currentResults);
             }
 
+            function generateProjectContent_tierra(results) { 
+                return generateBaseLayout_tierra(
+                    "Resultados del Proyecto (Esquema TT)", 
+                    `${generateProjectResultsTab_tierra(results)}${generateProjectCalculosTab_tierra(results)}${generateFormulasTab_tierra()}${generateTablasTab_tierra()}`
+                ); 
+            }
+
+            function generateDomiciliariaContent_tierra(results) { 
+                return generateBaseLayout_tierra(
+                    "Resultados Verificación Domiciliaria", 
+                    `${generateDomiciliariaResultsTab_tierra(results)}${generateDomiciliariaCalculosTab_tierra(results)}${generateFormulasTab_tierra()}${generateTablasTab_tierra()}`
+                ); 
+            }
+
             function displayResults_tierra(results) {
                 dom_tierra.loaderContainer.style.display = 'none';
                 dom_tierra.resultsContainer.style.display = 'block';
@@ -1488,7 +1510,7 @@
             function generateProjectResultsTab_tierra({ patService, patProteccion }) {
                 const serviceCard = createResultCard_tierra('Puesta a Tierra de Servicio', 'RB', patService);
                 const protectionCards = patProteccion.map((p, i) => createResultCard_tierra(p.name, `RA${i+1}`, p)).join('');
-                return `<div id="tab-resultados" class="result-section space-y-6"><div><h3 class="text-xl font-semibold mb-3">1. Sistema de Servicio (Neutro)</h3><p class="text-sm mb-2">Puesta a tierra para estabilidad de la red.</p>${serviceCard}</div><div><h3 class="text-xl font-semibold mb-3">2. Sistemas de Protección (Masas)</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${protectionCards}</div></div><div><h3 class="text-xl font-semibold mb-3">3. Requisito de Separación</h3><div class="info-card p-4 rounded-lg"><p class="text-sm">Separación Mínima entre Jabalinas de distintos sistemas (Recomendado > 5m). Aplicable solo a jabalinas verticales.</p><p class="text-2xl font-bold">${(patService.Re > 0 ? (patService.Re * 10).toFixed(2) : 'N/A')} m</p></div></div></div>`;
+                return `<div id="tab-resultados" class="result-section space-y-6"><div><h3 class="text-xl font-semibold mb-3">1. Sistema de Servicio (Neutro)</h3><p class="text-sm mb-2 text-text-secondary">Puesta a tierra para estabilidad de la red.</p>${serviceCard}</div><div><h3 class="text-xl font-semibold mb-3">2. Sistemas de Protección (Masas)</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${protectionCards}</div></div><div><h3 class="text-xl font-semibold mb-3">3. Requisito de Separación</h3><div class="info-card p-4 rounded-lg"><p class="text-sm text-text-secondary">Separación Mínima entre Jabalinas de distintos sistemas (Recomendado > 5m). Aplicable solo a jabalinas verticales.</p><p class="text-2xl font-bold">${(patService.Re > 0 ? (patService.Re * 10).toFixed(2) : 'N/A')} m</p></div></div></div>`;
             }
             function generateProjectCalculosTab_tierra({ patService, patProteccion, params }) {
                 const serviceCalc = `RT = K * Rj = ${DB.parallelCoefficients[patService.numElectrodos]} * ${patService.Rj.toFixed(2)} = ${patService.Rt.toFixed(2)} Ω`;
@@ -1524,9 +1546,9 @@
                         </div>`;
                 }
                 function generateTablasTab_tierra() {
-                    const soilRows = Object.entries(DB.soilResistivity).map(([val, name]) => `<tr><td class="p-3">${name}</td><td class="p-3 text-right">${val} Ω·m</td></tr>`).join('');
-                    const parallelRows = Object.entries(DB.parallelCoefficients).map(([n, k]) => `<tr><td class="p-3">${n}</td><td class="p-3 text-right">${k}</td></tr>`).join('');
-                    const rcdRows = Object.entries(DB.aeaFinalCap).map(([rcd, res]) => `<tr><td class="p-3">${parseInt(rcd) < 1000 ? rcd + ' mA' : rcd/1000 + ' A'}</td><td class="p-3 text-right">${DB.aeaTable['50'][rcd] || '-'} Ω</td><td class="p-3 text-right">${DB.aeaTable['24'][rcd] || '-'} Ω</td><td class="p-3 text-right font-bold">${res} Ω</td></tr>`).join('');
+                    const soilRows = Object.entries(DB.soilResistivity).map(([val, name]) => `<tr><td class="border border-border-color p-3">${name}</td><td class="border border-border-color p-3 text-right">${val} Ω·m</td></tr>`).join('');
+                    const parallelRows = Object.entries(DB.parallelCoefficients).map(([n, k]) => `<tr><td class="border border-border-color p-3">${n}</td><td class="border border-border-color p-3 text-right">${k}</td></tr>`).join('');
+                    const rcdRows = Object.entries(DB.aeaFinalCap).map(([rcd, res]) => `<tr><td class="border border-border-color p-3">${parseInt(rcd) < 1000 ? rcd + ' mA' : rcd/1000 + ' A'}</td><td class="border border-border-color p-3 text-right">${DB.aeaTable['50'][rcd] || '-'} Ω</td><td class="border border-border-color p-3 text-right">${DB.aeaTable['24'][rcd] || '-'} Ω</td><td class="border border-border-color p-3 text-right font-bold">${res} Ω</td></tr>`).join('');
                     return `<div id="tab-tablas" class="result-section"><div class="grid grid-cols-1 gap-6"><div class="lg:col-span-2"><h4 class="font-semibold mb-3 text-primary-color">Tabla 1: Resistencia Máxima de Protección vs. Diferencial (AEA 90364)</h4><div class="overflow-x-auto bg-input-bg rounded-lg"><table class="w-full text-sm text-left"><thead class="bg-input-bg text-xs uppercase"><tr><th class="p-3" rowspan="2">Sensibilidad (IΔn)</th><th class="p-3 text-center" colspan="3">Resistencia Máxima (RA)</th></tr><tr><th class="p-3 text-right">UL = 50V</th><th class="p-3 text-right">UL = 24V</th><th class="p-3 text-right font-bold">Valor Final</th></tr></thead><tbody class="divide-y divide-border-color">${rcdRows}</tbody></table></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div><h4 class="font-semibold mb-3 text-primary-color">Tabla 2: Resistividad del Terreno</h4><div class="overflow-x-auto bg-input-bg rounded-lg"><table class="w-full text-sm text-left"><thead class="bg-input-bg text-xs uppercase"><tr><th class="p-3">Tipo de Suelo</th><th class="p-3 text-right">Valor</th></tr></thead><tbody class="divide-y divide-border-color">${soilRows}</tbody></table></div></div><div><h4 class="font-semibold mb-3 text-primary-color">Tabla 3: Coeficientes Paralelo (K)</h4><div class="overflow-x-auto bg-input-bg rounded-lg"><table class="w-full text-sm text-left"><thead class="bg-input-bg text-xs uppercase"><tr><th class="p-3">N° Jabalinas</th><th class="p-3 text-right">K</th></tr></thead><tbody class="divide-y divide-border-color">${parallelRows}</tbody></table></div></div></div></div></div>`;
                 }
             
@@ -1600,7 +1622,7 @@
             addEventListeners_tierra();
             loadState_tierra();
             handleModeChange_tierra();
-            if (dom_tierra.mode_selector.value === 'proyecto' && document.querySelectorAll('.sector-card').length === 0) {
+            if (dom_tierra.mode_selector.value === 'proyecto' && document.querySelectorAll('#sectores-container > div').length === 0) {
                 addSector_tierra();
             }
         })();
@@ -1652,7 +1674,7 @@
 
                 feederDiv.innerHTML = `
                     <div class="flex justify-between items-center mb-4">
-                        <input type="text" value="Alimentador a Trafo #${count}" class="node-name-input text-lg font-bold text-purple-700 data-input bg-transparent border-0 focus:ring-0 p-0">
+                        <input type="text" value="Alimentador a Trafo #${count}" class="node-name-input text-lg font-bold text-purple-700 dark:text-purple-400 data-input bg-transparent border-0 focus:ring-0 p-0">
                         <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-bold text-2xl" data-target="${id}">&times;</button>
                     </div>
                     <div class="section-divider">
@@ -1705,10 +1727,10 @@
                             <div class="input-group"><label>Tipo</label><select class="cable-type-sc data-input"><option value="tripolar" selected>Tripolar</option><option value="unipolar">3 Unipolares</option></select></div>
                             <div class="input-group"><label>Tiempo Despeje [s]</label><input type="number" value="0.1" min="0.01" step="0.01" class="protection-time-sc data-input"></div>
                         </div>
-                        <div class="mt-2 p-3 bg-indigo-100 rounded-lg">
+                        <div class="mt-2 p-3 bg-indigo-100 dark:bg-indigo-900/20 rounded-lg">
                                 <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" class="motor-contribution-cb data-input form-checkbox h-5 w-5 text-indigo-600">
-                                    <span class="text-sm font-medium text-gray-700">Aporte de Motor al CC</span>
+                                    <input type="checkbox" class="motor-contribution-cb data-input form-checkbox h-5 w-5 text-indigo-600 rounded">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Aporte de Motor al CC</span>
                                 </label>
                             <div class="motor-input-container hidden mt-2">
                                 <div class="input-group !mb-0"><label>In Motor [A]</label><input type="number" value="100" min="0" class="motor-in-sc data-input"></div>
@@ -1751,7 +1773,7 @@
                 
                 document.querySelectorAll('.feeder-node').forEach((feederNode, index) => {
                     const feederName = feederNode.querySelector('.node-name-input').value || `Alimentador #${index + 1}`;
-                    calculationLog.push(`<strong class="text-purple-700 mt-4 block border-t pt-4 border-border-color">--- INICIO CÁLCULO ${feederName.toUpperCase()} ---</strong>`);
+                    calculationLog.push(`<strong class="text-purple-700 dark:text-purple-400 mt-4 block border-t pt-4 border-border-color">--- INICIO CÁLCULO ${feederName.toUpperCase()} ---</strong>`);
                     
                     const S_tr_kva = parseFloat(feederNode.querySelector('.power').value) || 0;
                     const U_tr_v = parseFloat(feederNode.querySelector('.voltage').value) || 0;
@@ -1863,9 +1885,9 @@
                     const { I_adm_cc, Icc_motor, Icc_total, passes } = verification;
                     const resultClass = passes ? 'bg-success-bg text-success-text' : 'bg-error-bg text-error-text';
                     verificationHTML = `
-                        <div class="result-item text-sm"><span>Icc Aporte Red:</span><span class="font-bold">${(Icc_source / 1000).toFixed(2)} kA</span></div>
-                        <div class="result-item text-sm"><span>Icc Aporte Motores:</span><span class="font-bold">${(Icc_motor / 1000).toFixed(2)} kA</span></div>
-                        <div class="result-item"><span>Icc Total (para verificación):</span><span class="font-bold text-lg text-primary-color">${(Icc_total / 1000).toFixed(2)} kA</span></div>
+                        <div class="result-line text-sm"><span>Icc Aporte Red:</span><span class="font-bold">${(Icc_source / 1000).toFixed(2)} kA</span></div>
+                        <div class="result-line text-sm"><span>Icc Aporte Motores:</span><span class="font-bold">${(Icc_motor / 1000).toFixed(2)} kA</span></div>
+                        <div class="result-line"><span>Icc Total (para verificación):</span><span class="font-bold text-lg text-primary-color">${(Icc_total / 1000).toFixed(2)} kA</span></div>
                         <div class="mt-4 p-3 rounded-lg text-center font-bold text-lg ${resultClass}">
                             Verificación por Cortocircuito (Efecto Térmico): ${passes ? 'VERIFICA' : 'NO VERIFICA'}
                         </div>
@@ -1877,11 +1899,11 @@
 
                 const resultDiv = document.createElement('div');
                 resultDiv.className = 'result-card';
-                resultDiv.innerHTML = `<h4 class="text-lg font-semibold text-indigo-600 mb-3">${pointName}</h4>
-                    <div class="result-item"><span>Icc en Punto (aporte red):</span><span class="font-bold text-xl text-red-600">${(Icc_source / 1000).toFixed(2)} kA</span></div>
-                    <div class="result-item"><span>Corriente de Impulso (Is):</span><span class="font-bold text-xl text-purple-600">${(Is / 1000).toFixed(2)} kA</span></div>
+                resultDiv.innerHTML = `<h4 class="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mb-3">${pointName}</h4>
+                    <div class="result-line"><span>Icc en Punto (aporte red):</span><span class="font-bold text-xl text-red-600 dark:text-red-400">${(Icc_source / 1000).toFixed(2)} kA</span></div>
+                    <div class="result-line"><span>Corriente de Impulso (Is):</span><span class="font-bold text-xl text-purple-600 dark:text-purple-400">${(Is / 1000).toFixed(2)} kA</span></div>
                     ${verificationHTML}
-                    <details class="mt-2 text-sm"><summary>Ver detalles de impedancia</summary><div class="p-2 bg-body-bg rounded">Z_total: ${Z_total.toFixed(5)} Ω<br>R_total: ${R_total.toFixed(5)} Ω<br>X_total: ${X_total.toFixed(5)} Ω<br>R/X: ${ratio_RX.toFixed(3)}<br>Factor χ: ${kappa.toFixed(3)}</div></details>`;
+                    <details class="mt-2 text-sm"><summary class="cursor-pointer">Ver detalles de impedancia</summary><div class="p-2 bg-body-bg rounded mt-1">Z_total: ${Z_total.toFixed(5)} Ω<br>R_total: ${R_total.toFixed(5)} Ω<br>X_total: ${X_total.toFixed(5)} Ω<br>R/X: ${ratio_RX.toFixed(3)}<br>Factor χ: ${kappa.toFixed(3)}</div></details>`;
                 getById_sc('resultsContentSC').appendChild(resultDiv);
                 
                 exportData.push({
@@ -1891,7 +1913,7 @@
             
             function displayCalculationLog(log) {
                 const container = getById_sc('calculationLogContainer');
-                container.innerHTML = log.length ? log.map(e => `<div class="calculation-log-entry">${e}</div>`).join('') : '<p class="text-text-secondary p-4 text-center">El detalle del cálculo aparecerá aquí.</p>';
+                container.innerHTML = log.length ? log.map(e => `<div class="calculation-log-entry text-sm py-1">${e}</div>`).join('') : '<p class="text-text-secondary p-4 text-center">El detalle del cálculo aparecerá aquí.</p>';
             }
 
             function getKappaFactor(ratio) {
@@ -2148,3 +2170,4 @@
     </script>
 </body>
 </html>
+
